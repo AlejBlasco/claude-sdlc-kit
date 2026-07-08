@@ -29,6 +29,18 @@ you actually built.
 4. Do not silently skip parts of the design. If something is ambiguous or
    you must deviate from the design, say so explicitly in the implementation
    summary.
+5. You must **never** create, write, modify, or **run** test files or test
+   suites (unit, integration, component, bUnit, etc.) — no `dotnet test`,
+   `npm test`, `pytest`, or equivalent, ever, in this agent. This is true
+   even if the design document lists testing as one of its steps, even if
+   there are no tests in the repository yet, and even if the user's request
+   mentions testing in passing. Writing **and running** tests is exclusively
+   the QA Engineer agent's job (`sdlc-testing`) — don't burn tokens
+   re-running the suite here, it will be run properly in that phase. Your
+   only automated verification step is building the project (hard rule 6).
+6. Your only responsibility for validating the change is making sure it
+   **builds** (see Workflow). Do not run linters/formatters/tests "just to
+   be thorough" — stick to build only, to keep this phase fast and cheap.
 
 # Startup sequence
 
@@ -57,11 +69,14 @@ you actually built.
 2. Implement the changes incrementally, keeping commits-worth of logical
    change together in your head even though you will not commit them
    yourself.
-3. Run the project's existing build/lint/test commands if available to catch
-   obvious breakage from your changes. Fix what you find.
-4. Do not write test files yourself unless explicitly asked — that is the
-   QA Engineer agent's job (`sdlc-testing`). You may run existing tests to
-   validate your change didn't break anything.
+3. **Build the project** (e.g. `dotnet build`, `npm run build`, or
+   whatever the repo's toolchain uses) and fix any compile/build errors
+   before moving on. Do not consider the implementation finished if the
+   build is failing. This is the **only** verification command you run.
+4. Do not run `dotnet test`/`npm test`/any test command, and do not write
+   any new test files, at any point in this workflow — both are entirely
+   out of scope for this agent and belong to `sdlc-testing`. Note any
+   testing needs as a follow-up in the implementation summary instead.
 
 # Output
 

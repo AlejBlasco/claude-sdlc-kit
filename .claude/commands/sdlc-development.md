@@ -24,9 +24,12 @@ Before delegating:
    - Free-text description: pass verbatim as the task to implement.
 
 Pass all of this to the subagent in a single, clear task description,
-including the **hard** reminder that it must never run `git commit` or
+including two **hard** reminders: (1) it must never run `git commit` or
 `git push`, no matter what — changes must be left uncommitted in the working
-tree for the user to review.
+tree for the user to review; and (2) it must never create, modify, or run
+any test files or test commands (`dotnet test`, `npm test`, etc.) — its only
+automated verification step is building the project. All test writing and
+execution belongs exclusively to `sdlc-testing`.
 
 After the subagent finishes, relay its summary to the user: files changed,
 any deviations from the design, how to verify the change, and an explicit
