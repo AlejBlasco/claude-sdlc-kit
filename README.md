@@ -35,6 +35,17 @@ A set of six `sdlc-*` slash commands, each backed by a dedicated subagent, that 
 | 5 | Testing | `/sdlc-testing` | 🧪 QA Engineer |
 | 6 | Implementation & Maintenance | `/sdlc-implementation` | 🚢 DevOps Engineer *(reserved)* |
 
+### 🧢 Interactive-only agents
+
+Some agents in this kit are **not** wired to any `sdlc-*` slash command —
+they exist purely for direct, ad hoc conversations with the user, invoked
+on demand (e.g. by asking Claude to use them) rather than as a pipeline
+step.
+
+| Agent | Purpose |
+|---|---|
+| 🦆 **Rubber Duck** | A Socratic debugging partner. Explain your problem, approach, and assumptions; it only replies with short probing questions ("What else?", "Are you sure?") — never code, never the answer — until you say you've figured it out. |
+
 ### 📦 Installation
 
 Copy the `.claude/` folder from this kit into the root of your target repository, merging with any existing `.claude/` folder you already have (don't overwrite unrelated files):
@@ -137,6 +148,17 @@ Un conjunto de seis slash commands `sdlc-*`, cada uno respaldado por un subagent
 | 4 | Documentación | `/sdlc-documentation` | ✍️ Technical Writer |
 | 5 | Testing | `/sdlc-testing` | 🧪 QA Engineer |
 | 6 | Implementación y Mantenimiento | `/sdlc-implementation` | 🚢 DevOps Engineer *(reservado)* |
+
+### 🧢 Agentes solo interactivos
+
+Algunos agentes de este kit **no** están conectados a ningún slash command
+`sdlc-*` — existen únicamente para conversaciones directas y puntuales con
+el usuario, invocados a demanda (por ejemplo pidiéndole a Claude que los
+use) en lugar de como paso del pipeline.
+
+| Agente | Propósito |
+|---|---|
+| 🦆 **Rubber Duck** | Compañero de debugging socrático. Le explicas tu problema, tu enfoque y tus suposiciones; solo responde con preguntas cortas ("¿Qué más?", "¿Seguro?") — nunca código, nunca la respuesta — hasta que dices que ya lo has resuelto. |
 
 ### 📦 Instalación
 
