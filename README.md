@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.1-blue)
+![Version](https://img.shields.io/badge/version-2.2-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -33,7 +33,7 @@ A set of six `sdlc-*` slash commands, each backed by a dedicated subagent, that 
 | 3 | Development & Programming | `/sdlc-development` | 👨‍💻 Software Developer |
 | 4 | Documentation | `/sdlc-documentation` | ✍️ Technical Writer |
 | 5 | Testing | `/sdlc-testing` | 🧪 QA Engineer |
-| 6 | Implementation & Maintenance | `/sdlc-implementation` | 🚢 DevOps Engineer *(reserved)* |
+| 6 | Implementation & Maintenance | `/sdlc-implementation` | 🚢 DevOps Engineer |
 
 ### 🧢 Interactive-only agents
 
@@ -94,6 +94,7 @@ Edit `.claude/sdlc.config.yaml`:
 | `paths.technicalDocs` | `docs/technical` | Output folder for the technical document from `sdlc-documentation`. |
 | `paths.functionalDocs` | `docs/functional` | Output folder for the functional document from `sdlc-documentation`. |
 | `paths.testing` | `docs/sdlc/testing` | Output folder for `sdlc-testing`'s summary. |
+| `paths.deployment` | `docs/sdlc/deployment` | Output folder for `sdlc-implementation`'s deployment runbook. |
 
 ### 🚀 Usage
 
@@ -111,7 +112,7 @@ Each command accepts either:
 /sdlc-testing docs/sdlc/development/password-reset.md
 ```
 
-The natural flow is **analysis → design → development → (documentation and testing, in either order)**. `sdlc-implementation` is reserved for a future version of this kit.
+The natural flow is **analysis → design → development → (documentation and testing, in either order) → implementation**. `sdlc-implementation` prepares/reviews deployment artifacts (Compose stacks, CI/CD pipeline, runbooks) — it never deploys anything itself.
 
 ### 🔁 Closing the loop on open questions
 
@@ -139,7 +140,30 @@ Pre-loaded skill files tuned for a Microsoft-stack team, auto-loaded by each age
 - **🏗️ Software Architect** — .NET + Azure architecture choices, CQRS/Mediator decision-making, .NET solution structure & naming.
 - **👨‍💻 Software Developer** — .NET 10 conventions, EF Core patterns, Blazor components, CQRS/Mediator implementation, Docker for .NET, Microsoft naming conventions, SOLID principles.
 - **🧪 QA Engineer** — .NET testing with xUnit (+ Moq, WebApplicationFactory, Testcontainers), Blazor component testing with bUnit.
-- **🚢 DevOps Engineer** — Azure CI/CD reference (reserved — the agent stays a stub until this phase is activated).
+- **🚢 DevOps Engineer** — Azure CI/CD reference, plus self-hosted custom server deployment with Docker, GHCR and Portainer.
+
+### 🚢 Self-hosted deployment (Docker + Portainer)
+
+For teams running a custom, self-hosted server instead of a cloud
+provider, `sdlc-implementation` knows how to wire up a full release flow:
+build and push images to GitHub Container Registry (GHCR) from `cd.yaml`,
+then apply them to a single Portainer node running multiple stacks, via
+whichever mechanism fits the setup:
+
+- **Portainer webhook** triggered from the last step of `cd.yaml` (needs
+  Portainer's free Business Edition tier, available forever for up to 3
+  nodes — CE alone doesn't support this).
+- **Git polling** on the Portainer side, if you'd rather not store a
+  webhook secret.
+- **Self-hosted GitHub Actions runner** on the custom server itself, if you want
+  to stay on Portainer CE with no GitOps dependency at all.
+- **Manual pull-and-redeploy** in the Portainer UI, always documented as
+  the fallback regardless of which automation is chosen.
+
+It never connects to the custom server itself — it only edits Compose/pipeline
+files and documents the one-time manual setup (e.g. enabling the webhook
+in Portainer, adding the secret to GitHub) that the user performs outside
+the repo.
 
 ### 🔒 Hard invariant — no commit, no push
 
@@ -148,7 +172,7 @@ Every agent, command, and skill in this kit is explicitly instructed to **never*
 ### 🧩 Extending the kit
 
 - Add more skill files under `.claude/skills/<agent>/` as plain markdown — each agent reads the ones relevant to its current task automatically.
-- `devops-engineer` / `sdlc-implementation` is intentionally a stub. Define its scope (target environments, CI/CD tooling, rollback strategy) before fleshing it out.
+- `devops-engineer` / `sdlc-implementation` now prepares real deployment artifacts (Azure or self-hosted Docker/Portainer) but still never executes anything against a remote host — extend its skills under `.claude/skills/devops-engineer/` for other targets (e.g. a different cloud, Kubernetes) the same way.
 
 ---
 
@@ -165,7 +189,7 @@ Un conjunto de seis slash commands `sdlc-*`, cada uno respaldado por un subagent
 | 3 | Desarrollo y Programación | `/sdlc-development` | 👨‍💻 Software Developer |
 | 4 | Documentación | `/sdlc-documentation` | ✍️ Technical Writer |
 | 5 | Testing | `/sdlc-testing` | 🧪 QA Engineer |
-| 6 | Implementación y Mantenimiento | `/sdlc-implementation` | 🚢 DevOps Engineer *(reservado)* |
+| 6 | Implementación y Mantenimiento | `/sdlc-implementation` | 🚢 DevOps Engineer |
 
 ### 🧢 Agentes solo interactivos
 
@@ -226,6 +250,7 @@ Edita `.claude/sdlc.config.yaml`:
 | `paths.technicalDocs` | `docs/technical` | Carpeta de salida del documento técnico de `sdlc-documentation`. |
 | `paths.functionalDocs` | `docs/functional` | Carpeta de salida del documento funcional de `sdlc-documentation`. |
 | `paths.testing` | `docs/sdlc/testing` | Carpeta de salida del resumen de `sdlc-testing`. |
+| `paths.deployment` | `docs/sdlc/deployment` | Carpeta de salida del runbook de despliegue de `sdlc-implementation`. |
 
 ### 🚀 Uso
 
@@ -243,7 +268,7 @@ Cada comando acepta:
 /sdlc-testing docs/sdlc/development/password-reset.md
 ```
 
-El flujo natural es **análisis → diseño → desarrollo → (documentación y testing, en cualquier orden)**. `sdlc-implementation` queda reservado para una futura versión del kit.
+El flujo natural es **análisis → diseño → desarrollo → (documentación y testing, en cualquier orden) → implementación**. `sdlc-implementation` prepara/revisa artefactos de despliegue (stacks de Compose, pipeline de CI/CD, runbooks) — nunca despliega nada por sí mismo.
 
 ### 🔁 Cierre de puntos abiertos
 
@@ -273,7 +298,30 @@ Skills precargados y orientados a un equipo con stack Microsoft, que cada agente
 - **🏗️ Software Architect** — decisiones de arquitectura .NET + Azure, criterio para adoptar CQRS/Mediator, estructura y naming de soluciones .NET.
 - **👨‍💻 Software Developer** — convenciones de .NET 10, patrones de EF Core, componentes Blazor, implementación de CQRS/Mediator, Docker para .NET, naming conventions de Microsoft, principios SOLID.
 - **🧪 QA Engineer** — testing .NET con xUnit (+ Moq, WebApplicationFactory, Testcontainers), testing de componentes Blazor con bUnit.
-- **🚢 DevOps Engineer** — referencia de CI/CD en Azure (reservado — el agente sigue siendo un stub hasta que se active esta fase).
+- **🚢 DevOps Engineer** — referencia de CI/CD en Azure, además de despliegue self-hosted en servidor propio con Docker, GHCR y Portainer.
+
+### 🚢 Despliegue self-hosted (Docker + Portainer)
+
+Para equipos con un servidor propio en vez de un proveedor cloud,
+`sdlc-implementation` sabe montar un flujo de release completo: construir
+y subir imágenes a GitHub Container Registry (GHCR) desde `cd.yaml`, y
+aplicarlas a un único nodo de Portainer con varios stacks, según el
+mecanismo que mejor encaje:
+
+- **Webhook de Portainer** disparado desde el último paso de `cd.yaml`
+  (requiere la Business Edition gratuita de Portainer, disponible para
+  siempre hasta 3 nodos — la CE por sí sola no lo soporta).
+- **Polling de Git** en el lado de Portainer, si prefieres no guardar un
+  secreto de webhook.
+- **Runner autoalojado de GitHub Actions** en el propio servidor, si
+  quieres quedarte en Portainer CE sin depender de GitOps.
+- **Pull y redeploy manual** en la UI de Portainer, siempre documentado
+  como alternativa de respaldo sea cual sea la automatización elegida.
+
+Nunca se conecta al servidor directamente — solo edita ficheros de
+Compose/pipeline y documenta la configuración manual puntual (activar el
+webhook en Portainer, añadir el secreto en GitHub) que el usuario realiza
+fuera del repositorio.
 
 ### 🔒 Invariante — nunca commit, nunca push
 
@@ -282,5 +330,5 @@ Todos los agentes, comandos y skills de este kit tienen la instrucción explíci
 ### 🧩 Ampliar el kit
 
 - Añade más skills en `.claude/skills/<agente>/` como markdown plano — cada agente ya está instruido para leer los que sean relevantes para su tarea.
-- `devops-engineer` / `sdlc-implementation` es un stub intencionado. Define su alcance (entornos objetivo, herramientas de CI/CD, estrategia de rollback) antes de desarrollarlo.
+- `devops-engineer` / `sdlc-implementation` ahora prepara artefactos de despliegue reales (Azure o Docker/Portainer self-hosted), pero sigue sin ejecutar nunca nada contra un host remoto — amplía sus skills en `.claude/skills/devops-engineer/` para otros destinos (otra nube, Kubernetes...) de la misma forma.
 

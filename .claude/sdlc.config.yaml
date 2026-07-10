@@ -43,6 +43,8 @@ paths:
   functionalDocs: docs/functional
   # Output of sdlc-testing (QA Engineer) - test reports/summaries
   testing: docs/sdlc/testing
+  # Output of sdlc-implementation (DevOps Engineer) - deployment runbooks
+  deployment: docs/sdlc/deployment
 
 # -----------------------------------------------------------------------------
 # HARD INVARIANT (cannot be overridden by any agent, command, skill, or user
