@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.0-blue)
+![Version](https://img.shields.io/badge/version-2.1-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -112,6 +112,24 @@ Each command accepts either:
 ```
 
 The natural flow is **analysis → design → development → (documentation and testing, in either order)**. `sdlc-implementation` is reserved for a future version of this kit.
+
+### 🔁 Closing the loop on open questions
+
+`sdlc-analysis` and `sdlc-design` don't just drop open questions/risks into
+the document and move on. Once the document is written, the command reads
+its "Assumptions & Open Questions" (analysis) or "Risks & Open Decisions"
+(design) section:
+
+- **Nothing open?** It just points you to the next command, as usual.
+- **Something open?** It rephrases each item as a direct question, lists
+  them for you right there in the conversation, and **waits for your
+  answers** instead of leaving them buried in the file. Once you answer,
+  it delegates back to the same agent to update the document in place —
+  resolving those items and adjusting any section your answers affect —
+  before pointing you to the next phase.
+
+This closes a gap where those documents used to come out "done" but full
+of loose threads the user had to notice and chase down manually.
 
 ### 🧠 Ecosystem skills (.NET 10 / Azure / Blazor)
 
@@ -226,6 +244,26 @@ Cada comando acepta:
 ```
 
 El flujo natural es **análisis → diseño → desarrollo → (documentación y testing, en cualquier orden)**. `sdlc-implementation` queda reservado para una futura versión del kit.
+
+### 🔁 Cierre de puntos abiertos
+
+`sdlc-analysis` y `sdlc-design` no se limitan a dejar preguntas o riesgos
+abiertos dentro del documento y seguir adelante. Una vez escrito el
+documento, el comando lee su sección "Assumptions & Open Questions"
+(análisis) o "Risks & Open Decisions" (diseño):
+
+- **¿No hay nada abierto?** Simplemente te indica el siguiente comando,
+  como siempre.
+- **¿Hay algo abierto?** Reformula cada punto como una pregunta directa,
+  te las lista ahí mismo en la conversación y **espera tus respuestas** en
+  lugar de dejarlas enterradas en el fichero. En cuanto respondes, vuelve a
+  delegar en el mismo agente para actualizar el documento en el sitio
+  —resolviendo esos puntos y ajustando cualquier sección afectada— antes de
+  indicarte la siguiente fase.
+
+Esto cierra un hueco donde estos documentos salían "terminados" pero
+llenos de cabos sueltos que el usuario tenía que detectar y perseguir a
+mano.
 
 ### 🧠 Skills del ecosistema (.NET 10 / Azure / Blazor)
 
