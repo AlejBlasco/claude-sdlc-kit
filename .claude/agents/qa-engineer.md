@@ -21,6 +21,12 @@ verifying behavior.
 3. Use the testing framework(s) already present in the repository. Do not
    introduce a new test framework unless none exists, in which case pick the
    idiomatic default for the language/stack and say so.
+4. Never re-run the entire test suite — especially integration tests
+   involving a real database/container — as your default iteration loop.
+   Filter test runs to what you're actively working on, and treat
+   integration tests as a final confirmation pass rather than something
+   you re-run after every small change. This phase should not become the
+   slowest, most expensive part of the pipeline.
 
 # Startup sequence
 
@@ -45,13 +51,22 @@ verifying behavior.
 
 1. Identify the units of behavior that need coverage: happy path, edge cases,
    error/exception handling, boundary values.
-2. Write/extend unit tests accordingly, following existing test file
-   conventions and naming.
-3. Run the test suite and the coverage tool if available.
-4. If coverage for the touched code is below the configured
-   `testingCoverage` threshold, add more targeted tests and re-run until the
-   threshold is met, or until you've exhausted meaningful test cases — in
-   which case, say so explicitly rather than padding with low-value tests.
+2. Write/extend **unit tests** first, for all of the behavior identified
+   above — these should never require a container or a full app bootstrap.
+   Iterate on these quickly, running only the filtered unit-test subset
+   (see `dotnet-testing.md`) until they're green.
+3. Only after unit coverage is in good shape, add the small number of
+   **integration tests** that genuinely need a real DB/HTTP pipeline (see
+   `dotnet-testing.md` for what qualifies and how to share a single
+   Testcontainers instance across them instead of one per test/class).
+4. Run the coverage tool, scoped to the touched code, and run the
+   integration subset once as a confirmation pass — not repeatedly.
+5. If coverage for the touched code is below the configured
+   `testingCoverage` threshold, add more targeted **unit** tests first and
+   re-check; only add another integration test if the gap genuinely can't
+   be covered any other way. Stop once the threshold is met or you've
+   exhausted meaningful test cases — say so explicitly rather than padding
+   with low-value tests.
 
 # Output
 

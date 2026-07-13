@@ -13,9 +13,14 @@ configured `testingCoverage` threshold.
    touched code's coverage is.
 3. If below threshold, identify the specific uncovered branches/lines and
    write targeted tests for them — don't add generic tests hoping numbers
-   go up.
-4. Re-run and confirm. Report the final number honestly, even if it's below
-   target after reasonable effort.
+   go up. Prefer closing the gap with unit tests; only reach for another
+   integration test if the missing coverage genuinely can't be exercised
+   any other way (see `dotnet-testing.md`).
+4. Re-run and confirm — but re-run cheaply: measure coverage against the
+   filtered unit-test subset while iterating, and only fold the
+   integration subset back in for the final confirmation, not on every
+   loop. Report the final number honestly, even if it's below target after
+   reasonable effort.
 
 ## If no coverage tool exists in the repo
 
