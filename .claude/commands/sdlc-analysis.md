@@ -29,22 +29,26 @@ Pass all of this to the subagent in a single, clear task description,
 including the reminder that it must never run `git commit` or `git push`.
 
 After the subagent finishes, relay its summary to the user, including the
-path of the requirements document it created and any assumptions/open
-questions it flagged.
+path of the requirements document it created and any dependencies/open
+questions/risks it flagged.
 
 ## Closing the loop on open questions
 
-Read the "Assumptions & Open Questions" section of the requirements
-document that was just created:
+Read the "Dependencies" section of the requirements document that was
+just created (it's shaped like `.github/ISSUE_TEMPLATE/feature_request.md`
+— see the business-analyst agent's Output format):
 
-1. If it says "None" (or is effectively empty), mention `sdlc-design` as
-   the likely next step and stop here — there's nothing else to do.
-2. If it lists real assumptions or open questions, do **not** hand them off
-   silently or let the user discover them buried in the file. Instead:
-   - Rephrase each item as a direct, answerable question (one per item)
-     and present them to the user as a clear numbered list, asking them to
-     confirm or correct each one so the requirements can be finalized
-     before moving on.
+1. If it says "None", or only contains `Depends on:`/`Related to:` items
+   that are already satisfied, mention `sdlc-design` as the likely next
+   step and stop here — there's nothing else to do.
+2. If it contains any `Open question:` bullet, or a `Depends on:` item
+   that is **not** yet confirmed as already in place, do **not** hand
+   them off silently or let the user discover them buried in the file.
+   Instead:
+   - Rephrase each such item as a direct, answerable question (one per
+     item) and present them to the user as a clear numbered list, asking
+     them to confirm or correct each one so the requirements can be
+     finalized before moving on.
    - Wait for the user's answers in their next message — do not guess or
      invent answers yourself, and do not proceed to `sdlc-design` in the
      meantime.
@@ -52,10 +56,10 @@ document that was just created:
      subagent (`subagent_type: "business-analyst"`), passing the original
      requirements document's path, the open items, and the user's answers,
      and instruct it to update that same file in place: resolve each item
-     in "Assumptions & Open Questions" (removing it once resolved, or
-     confirming it explicitly) and adjust any affected user
-     story/acceptance criteria (e.g. if an answer changes a GIVEN-WHEN-THEN
-     scenario).
+     under "Dependencies" (removing the `Open question:` bullet once
+     resolved, or confirming a `Depends on:` item explicitly) and adjust
+     any affected user story/acceptance criteria (e.g. if an answer
+     changes a GIVEN-WHEN-THEN scenario).
    - Relay the updated summary to the user and only then mention
      `sdlc-design` as the next step.
 

@@ -34,7 +34,8 @@ Mention in the requirements doc, when relevant, what "done" means beyond
 code complete: tests passing, documentation updated, deployed to a given
 environment, etc. — pull this from the team's existing DoD if the repo
 documents one (e.g. `CONTRIBUTING.md`, wiki links), otherwise state the
-generic default and flag it as an assumption.
+generic default as a `Technical Notes` bullet, flagged as an assumption
+rather than presented as settled fact.
 
 ## Azure DevOps / Jira specifics
 

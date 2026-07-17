@@ -35,3 +35,34 @@ THEN it works correctly
   unavailable dependency).
 - Idempotency/repetition case, if relevant (what happens if the same action
   is performed twice).
+
+## Expanding an Acceptance Criteria checklist item into a scenario
+
+Issues filed with this kit's `feature_request.md` template list Acceptance
+Criteria as a flat checklist (`- [ ] ...`), not as GIVEN-WHEN-THEN. Each
+checklist item is a terse statement of *what* must be true, not a full
+scenario — don't just wrap it in GIVEN/WHEN/THEN labels unchanged. Instead:
+
+1. Identify the implicit action (WHEN) and outcome (THEN) inside the
+   checklist item.
+2. Reconstruct a plausible precondition (GIVEN) that the item didn't
+   bother stating, since checklists assume shared context.
+3. Split one checklist item into **multiple** scenarios if it's really
+   several behaviors bundled together (common with checklist items like
+   "System handles parsing errors and displays clear messages" — that's
+   at least one scenario per error type worth distinguishing).
+
+Example — checklist item: `- [ ] System detects and validates expected
+columns (title, date, description, location, capacity, etc.)`
+
+Expanded scenarios:
+
+```
+GIVEN an uploaded CSV with all expected columns present
+WHEN the system validates the file
+THEN it proceeds to the preview step without errors
+
+GIVEN an uploaded CSV missing a required column (e.g. "date")
+WHEN the system validates the file
+THEN it rejects the file and reports which column is missing
+```

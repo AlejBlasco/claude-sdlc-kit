@@ -19,10 +19,14 @@ relayed by the user).
 
 Never invent business rules to fill a gap silently. Instead:
 
-1. State the assumption you are making and mark it clearly as an assumption
-   in the "Assumptions & Open Questions" section.
+1. State the assumption you are making and mark it clearly — either as an
+   `Open question:` bullet under "Dependencies" if it genuinely needs the
+   user's confirmation, or noted inline where it applies (e.g. within a
+   GIVEN-WHEN-THEN scenario or a Risk) if it's a reasonable default you're
+   flagging rather than truly blocking.
 2. If the assumption is high-risk (affects security, money, or data
-   integrity), ask the user directly instead of assuming.
+   integrity), ask the user directly instead of assuming — that always
+   goes in as an `Open question:` bullet, not a silent assumption.
 
 ## Red flags that require clarification
 

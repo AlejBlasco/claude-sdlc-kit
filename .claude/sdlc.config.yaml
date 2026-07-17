@@ -20,6 +20,18 @@ xmlDocComments: es
 # functional docs). Accepted values: any ISO 639-1 code.
 documentation: es
 
+# Language used for the GitHub issue templates under
+# .github/ISSUE_TEMPLATE/ (feature request, bug report). These are static
+# files filled in by humans, not generated per-run by an agent — this key
+# just records what language they were written in, so that if you
+# regenerate or add new templates later, they stay consistent.
+# Accepted values: any ISO 639-1 code.
+# NOTE: feature_request.md follows the user's own real-world template
+# (User Story / Acceptance Criteria / Technical Notes / Dependencies /
+# Risks), which is written in English — hence "en" here, unlike the other
+# language keys above.
+issueTemplates: en
+
 # Minimum desired test coverage percentage (0-100). The QA Engineer agent
 # must keep generating/adjusting unit tests until this threshold is met
 # (or explain to the user why it could not be reached).

@@ -45,29 +45,70 @@ and leave the "how" to the Software Architect and Software Developer agents.
    - **A URL** (Azure DevOps work item, GitHub/GitLab issue, Jira ticket...):
      fetch it. If you cannot access it (auth wall, blocked domain), tell the
      user plainly and ask them to paste the ticket content instead — do not
-     guess at its contents.
+     guess at its contents. If the issue follows this kit's own
+     `.github/ISSUE_TEMPLATE/feature_request.md` shape, map it directly
+     instead of treating it as generic free text — see "Parsing the kit's
+     feature request template" below.
    - **Free text** description from the user: work directly from it, but ask
      targeted clarifying questions if it is too ambiguous to produce testable
      criteria (missing actors, missing success/failure conditions, etc.).
 
+# The requirements document uses the same shape as the issue template
+
+This kit's own `.github/ISSUE_TEMPLATE/feature_request.md` (User Story +
+Acceptance Criteria + Technical Notes + Dependencies + Risks) is not just
+an input format — it is also the **output** shape of the requirements
+document you write (see Output below). This keeps one consistent shape
+across the whole loop: a GitHub issue filed with this template, the
+requirements document you produce, and any issue you might later help
+create all look the same.
+
+If the fetched GitHub issue already follows this shape, mapping is nearly
+a direct passthrough:
+
+- The **User Story** carries over as-is into the output.
+- Each **Acceptance Criteria** checklist item is a terse seed, not a full
+  scenario — expand each one into a complete GIVEN-WHEN-THEN scenario (see
+  `given-when-then-format.md`) rather than copying the checklist text
+  verbatim.
+- **Dependencies** carry over (`Depends on:` / `Related to:`); add an
+  `Open question:` bullet for anything genuinely ambiguous that doesn't
+  fit those two — this is what the closing-the-loop step in
+  `sdlc-analysis` turns into direct questions for the user.
+- **Risks** carry over, refined into concrete statements rather than
+  vague concerns.
+- **Technical Notes** carry over as suggestions for the Design phase —
+  never treat them as decisions, you do not own technology choices; the
+  Software Architect can accept, adapt, or override them.
+
+If the input does **not** already follow this shape (free text, a plain
+description, an issue from another tracker), build the same output shape
+from scratch using the workflow below — the source format doesn't matter,
+the output format always does.
+
 # Workflow
 
-1. Extract the actors, the business goal, and the boundaries of the feature
-   (what's explicitly in scope vs. out of scope).
-2. Identify open questions or assumptions. List them explicitly — do not
-   silently invent behavior that wasn't specified.
-3. Write one or more user stories in the classic form:
-   `As a <actor>, I want <capability>, so that <benefit>.`
-4. For each user story, write acceptance criteria as GIVEN-WHEN-THEN
-   scenarios, covering the happy path, edge cases, and error/negative cases.
-5. Note any non-functional requirements you can infer (performance, security,
-   accessibility, compliance) as a separate section, clearly flagged as
-   assumptions if not explicitly requested.
+1. Extract the actor(s), the business goal, and the boundaries of the
+   feature (what's explicitly in scope vs. out of scope) — this doesn't
+   get its own heading in the output, but it shapes everything else.
+2. Write one or more user stories in the classic form:
+   `**As a** <actor>, **I want** <capability>, **so that** <benefit>.`
+3. For each user story, write Acceptance Criteria as GIVEN-WHEN-THEN
+   scenarios, covering the happy path, edge cases, and error/negative
+   cases.
+4. Carry forward or infer **Technical Notes** — implementation hints
+   worth flagging for Design, never decisions.
+5. List **Dependencies**: real "Depends on"/"Related to" links, plus an
+   `Open question:` bullet for anything ambiguous you can't resolve
+   yourself — do not silently invent behavior that wasn't specified.
+6. List **Risks**: anything you can infer (performance, security,
+   data quality, accessibility, compliance, adoption) that's worth
+   flagging, with a rough impact assessment.
 
 # Output
 
-Write a single markdown file to `<paths.requirements>/<kebab-case-title>.md`
-with this structure:
+Write a single markdown file to `<paths.requirements>/<kebab-case-title>.md`,
+using the same shape as `.github/ISSUE_TEMPLATE/feature_request.md`:
 
 ```markdown
 # Requirements: <Title>
@@ -75,25 +116,33 @@ with this structure:
 ## Source
 <link or short description of where this came from>
 
-## Context & Goal
-<1-2 paragraphs>
+## US-1: <short title>
 
-## Assumptions & Open Questions
-- ...
+**As a** <actor>,
+**I want** <capability>,
+**so that** <benefit>.
 
-## User Stories
-
-### US-1: <short title>
-As a <actor>, I want <capability>, so that <benefit>.
-
-#### Acceptance Criteria
+### Acceptance Criteria
 - **GIVEN** <context> **WHEN** <action> **THEN** <expected outcome>
 - **GIVEN** ... **WHEN** ... **THEN** ...
 
-## Non-Functional Requirements
-- ...
+<!-- repeat ## US-2, US-3... if the request genuinely needs more than one story -->
+
+## Technical Notes
+- ... (or "None")
+
+## Dependencies
+- **Depends on:** ...
+- **Related to:** ...
+- **Open question:** ...
+(or "None" if there is genuinely nothing open)
+
+## Risks
+- **<category, e.g. Performance/Security/Data quality>:** ...
+- **Impact:** Low / Medium / High — ...
 ```
 
 End your turn with a short summary of the file you created and, if
-applicable, the open questions the user should resolve before moving on to
-the Design phase (`sdlc-design`).
+applicable, the open questions (the `Open question:` bullets under
+Dependencies) the user should resolve before moving on to the Design
+phase (`sdlc-design`).

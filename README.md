@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.2-blue)
+![Version](https://img.shields.io/badge/version-2.3-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -52,29 +52,33 @@ Copy the `.claude/` folder from this kit into the root of your target repository
 
 ```
 your-repo/
-└── .claude/
-    ├── sdlc.config.yaml
-    ├── agents/
-    │   ├── business-analyst.md
-    │   ├── software-architect.md
-    │   ├── software-developer.md
-    │   ├── technical-writer.md
-    │   ├── qa-engineer.md
-    │   └── devops-engineer.md
-    ├── commands/
-    │   ├── sdlc-analysis.md
-    │   ├── sdlc-design.md
-    │   ├── sdlc-development.md
-    │   ├── sdlc-documentation.md
-    │   ├── sdlc-testing.md
-    │   └── sdlc-implementation.md
-    └── skills/
-        ├── business-analyst/...
-        ├── software-architect/...
-        ├── software-developer/...
-        ├── technical-writer/...
-        ├── qa-engineer/...
-        └── devops-engineer/...
+├── .claude/
+│   ├── sdlc.config.yaml
+│   ├── agents/
+│   │   ├── business-analyst.md
+│   │   ├── software-architect.md
+│   │   ├── software-developer.md
+│   │   ├── technical-writer.md
+│   │   ├── qa-engineer.md
+│   │   └── devops-engineer.md
+│   ├── commands/
+│   │   ├── sdlc-analysis.md
+│   │   ├── sdlc-design.md
+│   │   ├── sdlc-development.md
+│   │   ├── sdlc-documentation.md
+│   │   ├── sdlc-testing.md
+│   │   └── sdlc-implementation.md
+│   └── skills/
+│       ├── business-analyst/...
+│       ├── software-architect/...
+│       ├── software-developer/...
+│       ├── technical-writer/...
+│       ├── qa-engineer/...
+│       └── devops-engineer/...
+└── .github/
+    └── ISSUE_TEMPLATE/
+        ├── feature_request.md
+        └── bug_report.md
 ```
 
 Restart/reload Claude Code in that repo so it picks up the new agents and commands.
@@ -87,6 +91,7 @@ Edit `.claude/sdlc.config.yaml`:
 |---|---|---|
 | `xmlDocComments` | `es` | Language for in-code documentation comments (XMLDoc/JSDoc/docstrings/etc.) written by the Software Developer agent. |
 | `documentation` | `es` | Language for all generated markdown documentation (requirements, design, implementation summaries, technical/functional docs, testing summaries). |
+| `issueTemplates` | `en` | Language used in the static GitHub issue templates under `.github/ISSUE_TEMPLATE/` (not read by any agent at runtime — just documents what language they were written in; `feature_request.md` follows the user's own real-world template). |
 | `testingCoverage` | `70` | Minimum desired test coverage percentage (0-100) the QA Engineer agent aims for. |
 | `paths.requirements` | `docs/sdlc/requirements` | Output folder for `sdlc-analysis`. |
 | `paths.design` | `docs/sdlc/design` | Output folder for `sdlc-design`. |
@@ -114,12 +119,20 @@ Each command accepts either:
 
 The natural flow is **analysis → design → development → (documentation and testing, in either order) → implementation**. `sdlc-implementation` prepares/reviews deployment artifacts (Compose stacks, CI/CD pipeline, runbooks) — it never deploys anything itself.
 
+### 🐛 Issue templates
+
+`.github/ISSUE_TEMPLATE/feature_request.md` and `bug_report.md` ship with
+the kit so that raw input filed on GitHub is already structured enough to
+feed straight into `/sdlc-analysis` (context, actors, expected behavior for
+features; repro steps, expected vs. actual for bugs). They're plain static
+Markdown templates filled in by humans — no agent reads them at runtime.
+
 ### 🔁 Closing the loop on open questions
 
 `sdlc-analysis` and `sdlc-design` don't just drop open questions/risks into
 the document and move on. Once the document is written, the command reads
-its "Assumptions & Open Questions" (analysis) or "Risks & Open Decisions"
-(design) section:
+its "Dependencies" (analysis — looking for `Open question:` bullets) or
+"Risks & Open Decisions" (design) section:
 
 - **Nothing open?** It just points you to the next command, as usual.
 - **Something open?** It rephrases each item as a direct question, lists
@@ -208,29 +221,33 @@ Copia la carpeta `.claude/` de este kit a la raíz de tu repositorio, fusionánd
 
 ```
 tu-repo/
-└── .claude/
-    ├── sdlc.config.yaml
-    ├── agents/
-    │   ├── business-analyst.md
-    │   ├── software-architect.md
-    │   ├── software-developer.md
-    │   ├── technical-writer.md
-    │   ├── qa-engineer.md
-    │   └── devops-engineer.md
-    ├── commands/
-    │   ├── sdlc-analysis.md
-    │   ├── sdlc-design.md
-    │   ├── sdlc-development.md
-    │   ├── sdlc-documentation.md
-    │   ├── sdlc-testing.md
-    │   └── sdlc-implementation.md
-    └── skills/
-        ├── business-analyst/...
-        ├── software-architect/...
-        ├── software-developer/...
-        ├── technical-writer/...
-        ├── qa-engineer/...
-        └── devops-engineer/...
+├── .claude/
+│   ├── sdlc.config.yaml
+│   ├── agents/
+│   │   ├── business-analyst.md
+│   │   ├── software-architect.md
+│   │   ├── software-developer.md
+│   │   ├── technical-writer.md
+│   │   ├── qa-engineer.md
+│   │   └── devops-engineer.md
+│   ├── commands/
+│   │   ├── sdlc-analysis.md
+│   │   ├── sdlc-design.md
+│   │   ├── sdlc-development.md
+│   │   ├── sdlc-documentation.md
+│   │   ├── sdlc-testing.md
+│   │   └── sdlc-implementation.md
+│   └── skills/
+│       ├── business-analyst/...
+│       ├── software-architect/...
+│       ├── software-developer/...
+│       ├── technical-writer/...
+│       ├── qa-engineer/...
+│       └── devops-engineer/...
+└── .github/
+    └── ISSUE_TEMPLATE/
+        ├── feature_request.md
+        └── bug_report.md
 ```
 
 Reinicia/recarga Claude Code en ese repositorio para que reconozca los nuevos agentes y comandos.
@@ -243,6 +260,7 @@ Edita `.claude/sdlc.config.yaml`:
 |---|---|---|
 | `xmlDocComments` | `es` | Idioma de los comentarios de documentación en código (XMLDoc/JSDoc/docstrings/etc.) que escribe el Software Developer. |
 | `documentation` | `es` | Idioma de toda la documentación markdown generada (requisitos, diseño, resúmenes de implementación, documentación técnica/funcional, resúmenes de testing). |
+| `issueTemplates` | `en` | Idioma de las plantillas estáticas de GitHub Issues en `.github/ISSUE_TEMPLATE/` (ningún agente la lee en tiempo real — solo documenta en qué idioma están escritas; `feature_request.md` sigue la plantilla real que ya usa el usuario). |
 | `testingCoverage` | `70` | Porcentaje mínimo de cobertura de tests (0-100) al que aspira el QA Engineer. |
 | `paths.requirements` | `docs/sdlc/requirements` | Carpeta de salida de `sdlc-analysis`. |
 | `paths.design` | `docs/sdlc/design` | Carpeta de salida de `sdlc-design`. |
@@ -270,12 +288,22 @@ Cada comando acepta:
 
 El flujo natural es **análisis → diseño → desarrollo → (documentación y testing, en cualquier orden) → implementación**. `sdlc-implementation` prepara/revisa artefactos de despliegue (stacks de Compose, pipeline de CI/CD, runbooks) — nunca despliega nada por sí mismo.
 
+### 🐛 Plantillas de Issues
+
+`.github/ISSUE_TEMPLATE/feature_request.md` y `bug_report.md` vienen
+incluidas en el kit para que lo que se abra en GitHub ya llegue
+suficientemente estructurado para alimentar `/sdlc-analysis` directamente
+(contexto, actores, comportamiento esperado en features; pasos de
+reproducción y comportamiento esperado/actual en bugs). Son plantillas
+Markdown estáticas que rellenan personas — ningún agente las lee en
+tiempo real.
+
 ### 🔁 Cierre de puntos abiertos
 
 `sdlc-analysis` y `sdlc-design` no se limitan a dejar preguntas o riesgos
 abiertos dentro del documento y seguir adelante. Una vez escrito el
-documento, el comando lee su sección "Assumptions & Open Questions"
-(análisis) o "Risks & Open Decisions" (diseño):
+documento, el comando lee su sección "Dependencies" (análisis — buscando
+bullets `Open question:`) o "Risks & Open Decisions" (diseño):
 
 - **¿No hay nada abierto?** Simplemente te indica el siguiente comando,
   como siempre.
