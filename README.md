@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.3-blue)
+![Version](https://img.shields.io/badge/version-2.4-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -126,6 +126,23 @@ the kit so that raw input filed on GitHub is already structured enough to
 feed straight into `/sdlc-analysis` (context, actors, expected behavior for
 features; repro steps, expected vs. actual for bugs). They're plain static
 Markdown templates filled in by humans — no agent reads them at runtime.
+
+**How this GitHub feature actually works:** GitHub scans
+`.github/ISSUE_TEMPLATE/` on the repository's default branch. If it finds
+files there, clicking **New issue** shows a template chooser instead of a
+blank issue. Each `.md` template needs a YAML front matter block —
+`name`, `about`, `title`, `labels`, `assignees` — followed by the
+Markdown body; `name` must be longer than 3 characters or GitHub won't
+list it. The `labels` field auto-applies existing repo labels to the
+issue (it won't create a label that doesn't exist yet). You can drop an
+optional `config.yml` in the same folder to disable the blank-issue
+option for external contributors (`blank_issues_enabled: false`) or add
+external `contact_links`. There's also a newer, structured alternative —
+`.yml` "issue forms" with typed fields (dropdowns, checkboxes, file
+uploads) — which we didn't use here since a Markdown template already
+matches the user's existing workflow. Full reference: [GitHub Docs —
+Configuring issue templates for your
+repository](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository).
 
 ### 🔁 Closing the loop on open questions
 
@@ -297,6 +314,24 @@ suficientemente estructurado para alimentar `/sdlc-analysis` directamente
 reproducción y comportamiento esperado/actual en bugs). Son plantillas
 Markdown estáticas que rellenan personas — ningún agente las lee en
 tiempo real.
+
+**Cómo funciona esta funcionalidad de GitHub:** GitHub escanea
+`.github/ISSUE_TEMPLATE/` en la rama por defecto del repositorio. Si
+encuentra ficheros ahí, al pulsar **New issue** aparece un selector de
+plantillas en vez de un issue en blanco. Cada plantilla `.md` necesita una
+cabecera YAML — `name`, `about`, `title`, `labels`, `assignees` — seguida
+del cuerpo en Markdown; `name` debe tener más de 3 caracteres o GitHub no
+la listará. El campo `labels` aplica automáticamente etiquetas que ya
+existan en el repo (no crea una etiqueta nueva si no existe). Se puede
+añadir un `config.yml` opcional en la misma carpeta para desactivar la
+opción de issue en blanco para colaboradores externos
+(`blank_issues_enabled: false`) o añadir `contact_links` externos. Existe
+también una alternativa más nueva y estructurada — "issue forms" en
+`.yml` con campos tipados (dropdowns, checkboxes, subida de ficheros) —
+que no hemos usado aquí porque una plantilla Markdown ya encajaba con el
+flujo de trabajo real del usuario. Referencia completa: [GitHub Docs —
+Configuring issue templates for your
+repository](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository).
 
 ### 🔁 Cierre de puntos abiertos
 
