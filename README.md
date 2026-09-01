@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.4-blue)
+![Version](https://img.shields.io/badge/version-2.5-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -166,10 +166,11 @@ of loose threads the user had to notice and chase down manually.
 
 Pre-loaded skill files tuned for a Microsoft-stack team, auto-loaded by each agent when relevant:
 
-- **🧑‍💼 Business Analyst** — Agile requirements framing (INVEST, DoR/DoD).
-- **🏗️ Software Architect** — .NET + Azure architecture choices, CQRS/Mediator decision-making, .NET solution structure & naming.
-- **👨‍💻 Software Developer** — .NET 10 conventions, EF Core patterns, Blazor components, CQRS/Mediator implementation, Docker for .NET, Microsoft naming conventions, SOLID principles.
-- **🧪 QA Engineer** — .NET testing with xUnit (+ Moq, WebApplicationFactory, Testcontainers), Blazor component testing with bUnit.
+- **🧑‍💼 Business Analyst** — Agile requirements framing (INVEST, DoR/DoD); ad hoc commercial product definition (audience, positioning, pricing hypotheses, licensing) for sellable/freelance deliverables.
+- **🏗️ Software Architect** — .NET + Azure architecture choices, CQRS/Mediator decision-making, .NET solution structure & naming, Blazor production architecture (render mode, layering, security/performance review).
+- **👨‍💻 Software Developer** — .NET 10 conventions, EF Core patterns, Blazor components, CQRS/Mediator implementation, Docker for .NET, Microsoft naming conventions, SOLID principles, plus a frontend/UI quality set: anti-generic design constitution, visual direction, design tokens, motion, responsive engineering, Tailwind/CSS conventions, Blazor UI systems, motion craft (Emil Kowalski), design modes (Impeccable), anti-slop frontend checklist (Taste Skill), redesign protocol.
+- **🧪 QA Engineer** — .NET testing with xUnit (+ Moq, WebApplicationFactory, Testcontainers), Blazor component testing with bUnit; ad hoc product-quality audits (accessibility, frontend performance, anti-generic-AI visual critique, anti-slop pre-flight audit, production readiness, Blazor data/API review).
+- **✍️ Technical Writer** — technical/functional documentation and Mermaid diagramming, plus a docs-as-product structure for customer-facing product deliverables.
 - **🚢 DevOps Engineer** — Azure CI/CD reference, plus self-hosted custom server deployment with Docker, GHCR and Portainer.
 
 ### 🚢 Self-hosted deployment (Docker + Portainer)
@@ -357,10 +358,11 @@ mano.
 
 Skills precargados y orientados a un equipo con stack Microsoft, que cada agente carga automáticamente cuando es relevante:
 
-- **🧑‍💼 Business Analyst** — enfoque Agile de requisitos (INVEST, DoR/DoD).
-- **🏗️ Software Architect** — decisiones de arquitectura .NET + Azure, criterio para adoptar CQRS/Mediator, estructura y naming de soluciones .NET.
-- **👨‍💻 Software Developer** — convenciones de .NET 10, patrones de EF Core, componentes Blazor, implementación de CQRS/Mediator, Docker para .NET, naming conventions de Microsoft, principios SOLID.
-- **🧪 QA Engineer** — testing .NET con xUnit (+ Moq, WebApplicationFactory, Testcontainers), testing de componentes Blazor con bUnit.
+- **🧑‍💼 Business Analyst** — enfoque Agile de requisitos (INVEST, DoR/DoD); definición de producto comercial puntual (audiencia, posicionamiento, hipótesis de precio, licencia) para entregables vendibles/freelance.
+- **🏗️ Software Architect** — decisiones de arquitectura .NET + Azure, criterio para adoptar CQRS/Mediator, estructura y naming de soluciones .NET, arquitectura de producción Blazor (render mode, capas, revisión de seguridad/rendimiento).
+- **👨‍💻 Software Developer** — convenciones de .NET 10, patrones de EF Core, componentes Blazor, implementación de CQRS/Mediator, Docker para .NET, naming conventions de Microsoft, principios SOLID, además de un bloque de calidad frontend/UI: constitución de diseño anti-genérico, dirección visual, design tokens, motion, responsive engineering, convenciones Tailwind/CSS, sistemas de UI en Blazor, motion craft (Emil Kowalski), modos de diseño (Impeccable), checklist anti-slop (Taste Skill), protocolo de rediseño.
+- **🧪 QA Engineer** — testing .NET con xUnit (+ Moq, WebApplicationFactory, Testcontainers), testing de componentes Blazor con bUnit; auditorías puntuales de calidad de producto (accesibilidad, rendimiento frontend, crítica visual anti-IA, auditoría anti-slop pre-flight, production readiness, revisión de datos/API Blazor).
+- **✍️ Technical Writer** — documentación técnica/funcional y diagramas Mermaid, además de una estructura docs-as-product para entregables de producto de cara al cliente.
 - **🚢 DevOps Engineer** — referencia de CI/CD en Azure, además de despliegue self-hosted en servidor propio con Docker, GHCR y Portainer.
 
 ### 🚢 Despliegue self-hosted (Docker + Portainer)

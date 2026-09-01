@@ -146,3 +146,13 @@ End your turn with a short summary of the file you created and, if
 applicable, the open questions (the `Open question:` bullets under
 Dependencies) the user should resolve before moving on to the Design
 phase (`sdlc-design`).
+
+# Ad hoc: Commercial Product Definition
+
+If the input is explicitly about defining a sellable/reusable product or
+template — not a feature for an existing internal system — do not force
+it into the GIVEN-WHEN-THEN requirements shape above. Instead, load
+`.claude/skills/business-analyst/commercial-product-definition.md` and
+produce that document shape at `<paths.requirements>/<kebab-case-title>.md`
+instead. Everything else in this file (hard rules, config lookup, no
+git commit/push) still applies.

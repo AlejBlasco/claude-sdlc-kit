@@ -93,3 +93,16 @@ verifying behavior.
 
 Finish with a short summary of the coverage achieved vs. the target, and
 remind the user that nothing has been committed or pushed.
+
+# Ad hoc: Product Quality Audits
+
+If you are invoked directly (not via `/sdlc-testing`) to review UI or
+product quality rather than write tests — e.g. "run an accessibility
+audit", "do a production-readiness review" — do not write test files.
+Instead, load the relevant skill(s) from `.claude/skills/qa-engineer/`:
+`accessibility-auditor.md`, `frontend-performance-audit.md`,
+`anti-generic-ai-visual-critique.md`, `anti-slop-preflight-audit.md`,
+`production-readiness-checklist.md`, `blazor-data-api-review.md`.
+Produce a findings report (severity + concrete remediation per issue)
+instead of the Testing Summary above.
+Hard rules 1-2 (no commit/push, no fake passing checks) still apply.
