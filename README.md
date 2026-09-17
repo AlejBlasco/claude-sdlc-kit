@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.5-blue)
+![Version](https://img.shields.io/badge/version-2.6-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -100,6 +100,7 @@ Edit `.claude/sdlc.config.yaml`:
 | `paths.functionalDocs` | `docs/functional` | Output folder for the functional document from `sdlc-documentation`. |
 | `paths.testing` | `docs/sdlc/testing` | Output folder for `sdlc-testing`'s summary. |
 | `paths.deployment` | `docs/sdlc/deployment` | Output folder for `sdlc-implementation`'s deployment runbook. |
+| `definitionOfDone` | 4 default items (see below) | Checklist the QA Engineer agent fills in with **real evidence** (a command it ran, the output it observed) at the end of `sdlc-testing` — never with prose describing what should happen. Defaults: automated tests pass, coverage threshold met, manual validation executed, no stray debug artifacts. Add your own items (e.g. a linter run, a security scan) the same way. |
 
 ### 🚀 Usage
 
@@ -161,6 +162,60 @@ its "Dependencies" (analysis — looking for `Open question:` bullets) or
 
 This closes a gap where those documents used to come out "done" but full
 of loose threads the user had to notice and chase down manually.
+
+**What actually counts as "open":** Business Analyst and Software
+Architect resolve implementation-level ambiguity themselves — a
+reasonable default, documented inline — and escalate only genuine
+product/scope ambiguity that would change user-visible behavior, the
+public surface, or needs a stakeholder's call. This calibration now lives
+in the agents themselves rather than depending on the delegating prompt
+to remind them each time, so a trivial feature doesn't come back with a
+pile of questions it didn't need.
+
+### 🔎 No literal facts from memory, no unchecked name collisions
+
+Two failure modes that only surfaced during development/testing in real
+runs are now closed earlier in the pipeline:
+
+- **Business Analyst** and **Software Architect** must verify any
+  concrete literal they're not 100% certain of (a model/product ID, a
+  package version, an API endpoint, a header name...) with
+  `WebSearch`/`WebFetch` against an official source before writing it
+  down — never from memory, and never parked as an `Open question`/open
+  decision just because they're unsure. This is what caught a retired
+  model ID and an invented package version in past runs, but only after
+  a human noticed manually; now it's a required step, not a lucky catch.
+- **Software Architect** must grep every new project/namespace/type name
+  it introduces against the framework/BCL's own reserved names (e.g.
+  `System.*`, `Application`, `Window`, `Console`, `MessageBox` for
+  .NET/WPF) and against the names already used in `src/`, before closing
+  the design document — instead of leaving the collision to be
+  discovered at compile time during `sdlc-development`.
+
+### ✅ Definition of Done — real evidence, not prose
+
+The Testing phase used to describe a manual validation step (e.g. "the
+API responds 200") as a note in the summary without ever actually running
+it. `sdlc-testing` now closes with a **Definition of Done** checklist
+(configurable via `definitionOfDone`, see Configuration) that the QA
+Engineer must fill in with real evidence: for any Acceptance Criterion or
+"How to Verify" step that describes observable runtime behavior, it
+actually runs the check (starts the app, curls the endpoint, runs the
+command) and records the real output — or leaves the item explicitly
+unchecked with the reason it couldn't be run, instead of marking it done
+on the strength of the code merely looking correct.
+
+### 🧵 Acceptance Criteria → Test traceability
+
+For issues that carry a formal Acceptance Criteria list (i.e. the input
+chain reaches back to a requirements document), `sdlc-testing` now closes
+with an explicit **AC → Test coverage** table: one row per
+GIVEN-WHEN-THEN scenario, naming the exact test that covers it, or
+pointing to the Definition of Done's manual validation instead. Coverage
+used to be a side effect of the Technical Writer reading everything
+downstream — this makes it a deliberate check the QA Engineer produces,
+so a requirement can't silently end up with no test and no manual check
+either.
 
 ### 🧠 Ecosystem skills (.NET 10 / Azure / Blazor)
 
@@ -287,6 +342,7 @@ Edita `.claude/sdlc.config.yaml`:
 | `paths.functionalDocs` | `docs/functional` | Carpeta de salida del documento funcional de `sdlc-documentation`. |
 | `paths.testing` | `docs/sdlc/testing` | Carpeta de salida del resumen de `sdlc-testing`. |
 | `paths.deployment` | `docs/sdlc/deployment` | Carpeta de salida del runbook de despliegue de `sdlc-implementation`. |
+| `definitionOfDone` | 4 ítems por defecto (ver abajo) | Checklist que el QA Engineer rellena con **evidencia real** (un comando que ha ejecutado, la salida que ha observado) al cerrar `sdlc-testing` — nunca con prosa describiendo lo que debería pasar. Por defecto: tests automáticos en verde, umbral de cobertura cumplido, validación manual ejecutada, sin artefactos de debug sueltos. Puedes añadir tus propios ítems (p. ej. un linter, un escaneo de seguridad) de la misma forma. |
 
 ### 🚀 Uso
 
@@ -353,6 +409,63 @@ bullets `Open question:`) o "Risks & Open Decisions" (diseño):
 Esto cierra un hueco donde estos documentos salían "terminados" pero
 llenos de cabos sueltos que el usuario tenía que detectar y perseguir a
 mano.
+
+**Qué cuenta realmente como "abierto":** Business Analyst y Software
+Architect resuelven ellos mismos la ambigüedad de nivel implementación —
+un valor por defecto razonable, documentado en el sitio — y solo escalan
+la ambigüedad genuina de producto/alcance que cambiaría el comportamiento
+visible, la superficie pública, o necesita el criterio de una persona
+stakeholder. Esta calibración vive ahora en los propios agentes en vez de
+depender de que el prompt de delegación se lo recuerde cada vez, así una
+funcionalidad trivial no vuelve con un montón de preguntas que no hacían
+falta.
+
+### 🔎 Ningún hecho literal de memoria, ninguna colisión de nombres sin revisar
+
+Dos fallos que solo salían a la luz durante desarrollo/testing en
+ejecuciones reales ahora se cierran antes en el pipeline:
+
+- **Business Analyst** y **Software Architect** deben verificar con
+  `WebSearch`/`WebFetch` contra una fuente oficial cualquier literal
+  concreto del que no estén 100% seguros (un ID de modelo/producto, una
+  versión de paquete, un endpoint de API, un nombre de header...) antes
+  de escribirlo — nunca de memoria, y nunca aparcado como `Open question`
+  o decisión abierta solo por inseguridad. Esto es justo lo que atrapó un
+  ID de modelo retirado y una versión de paquete inventada en ejecuciones
+  pasadas, pero solo después de que una persona lo notara a mano; ahora
+  es un paso obligatorio, no una detección afortunada.
+- **Software Architect** debe hacer grep de cada nombre nuevo de
+  proyecto/namespace/tipo que introduce contra los nombres reservados del
+  framework/BCL (p. ej. `System.*`, `Application`, `Window`, `Console`,
+  `MessageBox` en .NET/WPF) y contra los nombres ya usados en `src/`,
+  antes de cerrar el documento de diseño — en vez de dejar que la
+  colisión se descubra al compilar durante `sdlc-development`.
+
+### ✅ Definition of Done — evidencia real, no prosa
+
+La fase de Testing solía describir un paso de validación manual (p. ej.
+"la API responde 200") como una nota en el resumen sin llegar a
+ejecutarlo nunca. `sdlc-testing` ahora cierra con un checklist de
+**Definition of Done** (configurable vía `definitionOfDone`, ver
+Configuración) que el QA Engineer debe rellenar con evidencia real: para
+cada Criterio de Aceptación o paso de "How to Verify" que describa un
+comportamiento observable en tiempo de ejecución, lo ejecuta de verdad
+(levanta la app, hace curl al endpoint, ejecuta el comando) y anota la
+salida real — o deja el ítem explícitamente sin marcar con el motivo por
+el que no se pudo ejecutar, en vez de darlo por hecho porque el código
+"tiene buena pinta".
+
+### 🧵 Trazabilidad Criterio de Aceptación → Test
+
+Para issues que llevan una lista formal de Acceptance Criteria (es decir,
+la cadena de entrada llega hasta un documento de requisitos),
+`sdlc-testing` ahora cierra con una tabla explícita **AC → Test
+coverage**: una fila por escenario GIVEN-WHEN-THEN, nombrando el test
+exacto que lo cubre, o apuntando a la validación manual de la Definition
+of Done en su lugar. La cobertura solía ser un efecto colateral de que el
+Technical Writer leyera todo lo anterior — esto la convierte en una
+comprobación deliberada que produce el QA Engineer, para que un requisito
+no pueda quedarse en silencio sin test y sin validación manual tampoco.
 
 ### 🧠 Skills del ecosistema (.NET 10 / Azure / Blazor)
 

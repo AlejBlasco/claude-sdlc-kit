@@ -3,6 +3,69 @@
 All notable changes to this kit are documented in this file. Format
 loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.6] - 2026-09-17
+
+### Added
+
+- **Fact verification hard rule** (`business-analyst`, `software-architect`):
+  both agents must verify any concrete literal they're not 100% certain of
+  (model/product IDs, package versions, API endpoints, header names...)
+  with WebSearch/WebFetch against an official source before writing it
+  down, and never park a publicly verifiable fact as an `Open question`/
+  open decision just because they're unsure. Closes a real incident where
+  a retired model ID and an invented package version reached the
+  development/testing phase undetected — both agents already had
+  WebSearch/WebFetch available and simply weren't using them.
+- **Naming-collision check** (`software-architect`): mandatory workflow
+  step to grep every new project/namespace/type name against the
+  framework/BCL's reserved names (e.g. `System.*`, `Application`,
+  `Window`, `Console`, `MessageBox` for .NET/WPF) and against the project
+  and type names already present in `src/`, before closing the design
+  document — moved from being a lucky catch left to the agent's own
+  initiative to an explicit required step.
+- **`definitionOfDone` config key** (`sdlc.config.yaml`) and a matching
+  checklist in the Testing Summary (`qa-engineer`): four default items
+  (automated tests pass, coverage threshold met, manual validation
+  executed, no stray artifacts) that must be filled with real evidence —
+  a command actually run and its actual observed output — never with
+  prose describing what should happen. Closes a gap where an AC like "the
+  API responds 200" stayed as an unexecuted note in a doc.
+- **Acceptance Criteria → Test coverage table** (`qa-engineer`): for
+  issues with a formal AC list reachable from the input chain, the
+  Testing Summary now includes an explicit table mapping each
+  GIVEN-WHEN-THEN scenario to the test (or the manual validation) that
+  covers it, instead of relying on the Technical Writer noticing gaps as
+  a side effect of reading everything downstream.
+- **Ambiguity-escalation calibration** (new hard rule 5 on
+  `business-analyst` and `software-architect`): resolve
+  implementation-level ambiguity with a documented default; escalate as
+  an `Open question:`/open decision only genuine product/scope ambiguity
+  that changes user-visible behavior or the public surface. Moves this
+  rule from the delegating prompt (fragile — depended on the orchestrator
+  remembering to ask for it) into the agents themselves.
+
+### Changed
+
+- `README.md` (English and Spanish) — new sections documenting fact
+  verification, the naming-collision check, the Definition of Done gate,
+  Acceptance Criteria → Test traceability, and the ambiguity-escalation
+  calibration; `definitionOfDone` row added to the Configuration table;
+  version badge bumped `2.5` → `2.6`.
+
+### Verified, no action taken
+
+- Whether custom subagents auto-load the project's `CLAUDE.md` hierarchy,
+  to see if delegation prompts in `.claude/commands/*.md` could be
+  shortened to "follow CLAUDE.md" instead of repeating rules. Confirmed
+  true per Claude Code's own docs (code.claude.com/docs/en/sub-agents:
+  every subagent loads the full CLAUDE.md hierarchy the main conversation
+  loads, unless its frontmatter sets `omitClaudeMd`, which none of this
+  kit's agents do). But none of this kit's delegation prompts actually
+  repeat CLAUDE.md content — the one-line reminders they do repeat (e.g.
+  "never git commit/push") duplicate each agent's own Hard rule #1, not
+  CLAUDE.md, and are cheap enough (one sentence, defense-in-depth against
+  a costly mistake) not to be worth trimming.
+
 ## [2.5] - 2026-09-01
 
 ### Added

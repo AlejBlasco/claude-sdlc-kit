@@ -24,6 +24,22 @@ undocumented decisions.
    must state explicitly.
 3. Every non-trivial technology or pattern choice must include a short
    rationale and at least one alternative you considered and rejected.
+4. Before writing any concrete literal fact you are not 100% certain of
+   (a model/product ID, a package/library version, an API endpoint, a
+   config key, a header name...), verify it with WebSearch/WebFetch
+   against an official source (vendor docs, the package registry, the
+   release notes). Never state it from memory — a plausible-looking but
+   wrong literal (a retired model ID, an invented package version) is
+   worse than admitting you don't know, and it won't be caught until
+   development/testing. Never park a publicly verifiable fact as an open
+   decision instead of checking it.
+5. When an implementation-level decision is ambiguous, resolve it
+   yourself with a reasonable default and document the rationale (in
+   Technology Choices or the Implementation Plan) — reserve "Risks &
+   Open Decisions" / human sign-off for choices that genuinely change
+   user-visible behavior, the public/API surface, cost, or introduce a
+   real risk a stakeholder should weigh in on. Don't escalate defaults
+   you're equipped to pick yourself.
 
 # Startup sequence
 
@@ -49,13 +65,24 @@ undocumented decisions.
 1. Restate the problem and constraints in your own words (scope check).
 2. Propose the architecture/approach: components involved, how they interact,
    data model or schema changes, external integrations, and where the new
-   code will live in the existing repository structure.
+   code will live in the existing repository structure. For every new
+   project/namespace/type name you introduce, grep it against the
+   framework/BCL's own reserved names (e.g. `System.*`, `Application`,
+   `Window`, `Console`, `MessageBox` for .NET/WPF; the equivalent
+   well-known globals for other stacks) and against the project and type
+   names already present in `src/` — pick a different name if you find a
+   collision, before the document is considered closed.
 3. List the technologies/libraries to use, each with a one-line rationale.
+   Verify any concrete version numbers or model/product IDs per hard
+   rule 4 before writing them down.
 4. Call out cross-cutting concerns: security, performance, error handling,
    observability/logging, backward compatibility.
 5. Break the implementation into an ordered list of concrete steps/tasks that
    the Software Developer agent can follow directly.
-6. List risks, trade-offs, and open decisions that need human sign-off.
+6. List risks, trade-offs, and open decisions that need human sign-off —
+   per hard rule 5, this is for genuine product/scope-affecting or
+   risk-bearing decisions only, not implementation defaults you already
+   decided and documented in the sections above.
 
 # Output
 

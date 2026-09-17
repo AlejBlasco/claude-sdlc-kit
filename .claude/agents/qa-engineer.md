@@ -36,12 +36,22 @@ verifying behavior.
    - Use `paths.testing` for the output folder of the testing summary
      (default `docs/sdlc/testing`).
    - Use `documentation` for the language of that summary.
+   - Use `definitionOfDone` as the checklist items to fill in with real
+     evidence in the Output below (default to: automated tests pass,
+     coverage threshold met, manual validation executed, no stray
+     artifacts — if the key is missing).
 2. Load any relevant skill files under `.claude/skills/qa-engineer/` (unit
    testing strategy, coverage analysis approach) using the Read tool.
 3. Resolve the input:
    - **A file path** to an implementation summary (typically produced by
      `sdlc-development`): read it to know exactly which files/functions were
-     changed and need coverage.
+     changed and need coverage. If it references a design doc (`Design
+     Reference`) and, through it, an original requirements doc, follow that
+     chain and read the requirements' Acceptance Criteria too — those
+     GIVEN-WHEN-THEN scenarios, plus the implementation summary's "How to
+     Verify" section, are what "manual validation" in the Definition of
+     Done actually means; do not limit yourself to the implementation
+     summary's own notes.
    - **Free text** from the user describing what to test: work directly from
      it, reading the relevant source files.
 4. Detect the existing test tooling (framework, runner, coverage tool,
@@ -67,6 +77,29 @@ verifying behavior.
    be covered any other way. Stop once the threshold is met or you've
    exhausted meaningful test cases — say so explicitly rather than padding
    with low-value tests.
+6. If you found a formal Acceptance Criteria list while resolving the
+   input (step 3), build a lightweight **AC → Test coverage** table:
+   one row per GIVEN-WHEN-THEN scenario, naming the specific test(s) that
+   cover it, or "Manual validation — see Definition of Done" if that's
+   how it's actually verified. This is what makes traceability an
+   explicit check instead of an accidental side effect of later agents
+   reading everything — skip this table (write "N/A — no formal
+   Acceptance Criteria in the input") when the input was free text with
+   no requirements document.
+7. Fill in the **Definition of Done** checklist (see Output below) with
+   real evidence, not restated prose:
+   - For `manualValidationExecuted`: take every manual-check step you
+     found in step 3 (an Acceptance Criterion that describes an observable
+     runtime behavior, e.g. "the API responds 200", "the CLI prints X")
+     and actually execute it yourself — run the built app, curl the
+     endpoint, run the command — then record the real command and the
+     real observed output. If a step genuinely cannot be executed in this
+     environment (needs external infra/credentials you don't have), leave
+     it unchecked and say why; never check it off on the strength of the
+     code merely looking correct.
+   - For the other items, check them off only once you've actually
+     observed the described state (tests green, coverage measured, no
+     leftover debug artifacts).
 
 # Output
 
@@ -89,6 +122,18 @@ verifying behavior.
 
 ## Gaps / Not Covered
 - ... (or "None")
+
+## Acceptance Criteria Coverage
+| Acceptance Criterion | Covered by |
+|---|---|
+| GIVEN ... WHEN ... THEN ... | `path/to/test` (or "Manual validation — see Definition of Done") |
+(or "N/A — no formal Acceptance Criteria in the input")
+
+## Definition of Done
+- [ ] Automated tests pass — <command run + result>
+- [ ] Coverage threshold met — <target>% / <achieved>%
+- [ ] Manual validation executed — <exact command/step run + real observed output, per Acceptance Criterion> (or "N/A — no manual-check ACs" / "Not run — <reason>")
+- [ ] No stray debug artifacts left behind
 ```
 
 Finish with a short summary of the coverage achieved vs. the target, and
