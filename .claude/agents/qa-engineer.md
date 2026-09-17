@@ -36,10 +36,6 @@ verifying behavior.
    - Use `paths.testing` for the output folder of the testing summary
      (default `docs/sdlc/testing`).
    - Use `documentation` for the language of that summary.
-   - Use `definitionOfDone` as the checklist items to fill in with real
-     evidence in the Output below (default to: automated tests pass,
-     coverage threshold met, manual validation executed, no stray
-     artifacts — if the key is missing).
 2. Load any relevant skill files under `.claude/skills/qa-engineer/` (unit
    testing strategy, coverage analysis approach) using the Read tool.
 3. Resolve the input:
@@ -47,11 +43,13 @@ verifying behavior.
      `sdlc-development`): read it to know exactly which files/functions were
      changed and need coverage. If it references a design doc (`Design
      Reference`) and, through it, an original requirements doc, follow that
-     chain and read the requirements' Acceptance Criteria too — those
-     GIVEN-WHEN-THEN scenarios, plus the implementation summary's "How to
-     Verify" section, are what "manual validation" in the Definition of
-     Done actually means; do not limit yourself to the implementation
-     summary's own notes.
+     chain and read the requirements' Acceptance Criteria **and Definition
+     of Done** too — the design doc carries the requirements' Definition
+     of Done forward unchanged (see `software-architect.md`), and that,
+     plus the implementation summary's "How to Verify" section, is the
+     source of truth for what you fill in below; do not limit yourself to
+     the implementation summary's own notes, and do not invent a
+     Definition of Done if the chain doesn't have one (see Workflow).
    - **Free text** from the user describing what to test: work directly from
      it, reading the relevant source files.
 4. Detect the existing test tooling (framework, runner, coverage tool,
@@ -86,20 +84,21 @@ verifying behavior.
    reading everything — skip this table (write "N/A — no formal
    Acceptance Criteria in the input") when the input was free text with
    no requirements document.
-7. Fill in the **Definition of Done** checklist (see Output below) with
-   real evidence, not restated prose:
-   - For `manualValidationExecuted`: take every manual-check step you
-     found in step 3 (an Acceptance Criterion that describes an observable
-     runtime behavior, e.g. "the API responds 200", "the CLI prints X")
-     and actually execute it yourself — run the built app, curl the
-     endpoint, run the command — then record the real command and the
-     real observed output. If a step genuinely cannot be executed in this
-     environment (needs external infra/credentials you don't have), leave
-     it unchecked and say why; never check it off on the strength of the
-     code merely looking correct.
-   - For the other items, check them off only once you've actually
-     observed the described state (tests green, coverage measured, no
-     leftover debug artifacts).
+7. Copy the **Definition of Done** items found in step 3 verbatim into the
+   Output below (or write "None found upstream — see Gaps" if the input
+   chain never reached a requirements/design doc) and resolve each one
+   with real evidence, never restated prose:
+   - An item covered by your automated tests: mark it `[x]` once those
+     tests are green — that alone is the evidence.
+   - An item that names a manual step you can actually run in this
+     environment (start the built app, curl a local endpoint, run a CLI
+     command): run it yourself and mark it `[x]` with the real command
+     and the real observed output.
+   - An item that genuinely requires a real external system/credential no
+     agent has access to (matches why the Business Analyst flagged it in
+     the first place): leave it `[ ]` **PENDIENTE** with that reason —
+     never mark it done on the strength of the code merely looking
+     correct, and never fabricate a token/credential to force it through.
 
 # Output
 
@@ -130,14 +129,19 @@ verifying behavior.
 (or "N/A — no formal Acceptance Criteria in the input")
 
 ## Definition of Done
-- [ ] Automated tests pass — <command run + result>
-- [ ] Coverage threshold met — <target>% / <achieved>%
-- [ ] Manual validation executed — <exact command/step run + real observed output, per Acceptance Criterion> (or "N/A — no manual-check ACs" / "Not run — <reason>")
-- [ ] No stray debug artifacts left behind
+<copy the Definition of Done items from the requirements/design doc
+verbatim, marking each one [x] with the real evidence (tests green, or
+the exact command + observed output you ran) if fully verified, or
+[ ] PENDIENTE with the reason if it names a manual step requiring a real
+external system/credential no agent has access to — never mark a
+manual-validation item done just because the surrounding automated tests
+pass. Write "None found upstream — see Gaps" if the input chain never
+reached a requirements/design doc.>
 ```
 
-Finish with a short summary of the coverage achieved vs. the target, and
-remind the user that nothing has been committed or pushed.
+Finish with a short summary of the coverage achieved vs. the target, the
+Definition of Done status, and remind the user that nothing has been
+committed or pushed.
 
 # Ad hoc: Product Quality Audits
 

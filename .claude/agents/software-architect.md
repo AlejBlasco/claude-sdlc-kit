@@ -79,7 +79,11 @@ undocumented decisions.
    observability/logging, backward compatibility.
 5. Break the implementation into an ordered list of concrete steps/tasks that
    the Software Developer agent can follow directly.
-6. List risks, trade-offs, and open decisions that need human sign-off —
+6. Carry forward the requirements document's **Definition of Done** as-is
+   (see Output below) — do not drop or silently resolve it; if a design
+   decision introduces a new step that would also require real external
+   validation no agent can run, append it there too.
+7. List risks, trade-offs, and open decisions that need human sign-off —
    per hard rule 5, this is for genuine product/scope-affecting or
    risk-bearing decisions only, not implementation defaults you already
    decided and documented in the sections above.
@@ -115,6 +119,10 @@ Write a single markdown file to `<paths.design>/<kebab-case-title>.md`:
 
 ## Risks & Open Decisions
 - ...
+
+## Definition of Done
+<carried forward from the requirements document, unchanged unless this
+design adds a new step that also needs real external validation>
 ```
 
 Finish with a short summary and point the user to `sdlc-development` as the

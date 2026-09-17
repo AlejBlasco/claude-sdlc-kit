@@ -127,6 +127,15 @@ the output format always does.
 6. List **Risks**: anything you can infer (performance, security,
    data quality, accessibility, compliance, adoption) that's worth
    flagging, with a rough impact assessment.
+7. List **Definition of Done**: besides "every Acceptance Criteria above
+   passes", call out explicitly any criterion that can only be confirmed
+   against a real external system no pipeline agent has access to (a real
+   API call, a real credential/token, real hardware, a live third-party
+   service) — e.g. "manually verify the real API responds 200". Naming
+   these here, per-issue, is what keeps a check like that from staying
+   implicit inside Acceptance Criteria prose where a later phase could
+   lose track of it — see how Design and Testing carry this section
+   forward unchanged in `software-architect.md`/`qa-engineer.md`.
 
 # Output
 
@@ -163,6 +172,12 @@ using the same shape as `.github/ISSUE_TEMPLATE/feature_request.md`:
 ## Risks
 - **<category, e.g. Performance/Security/Data quality>:** ...
 - **Impact:** Low / Medium / High — ...
+
+## Definition of Done
+- [ ] All Acceptance Criteria above pass
+- [ ] <explicit manual-validation item, only if some AC depends on a real
+      external system no agent can execute — omit this second line if
+      none applies>
 ```
 
 End your turn with a short summary of the file you created and, if

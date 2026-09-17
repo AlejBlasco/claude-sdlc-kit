@@ -59,23 +59,12 @@ paths:
   deployment: docs/sdlc/deployment
 
 # -----------------------------------------------------------------------------
-# Definition of Done — checklist the QA Engineer agent must fill in
-# explicitly, with real evidence, at the end of the Testing phase (see
-# qa-engineer.md). An item is not satisfied by prose describing what
-# *should* happen — it requires the agent to have actually run the check
-# and recorded the observed result. If an item genuinely cannot be
-# executed in the current environment, it must be left unchecked with the
-# reason, never marked done anyway.
+# Definition of Done is NOT a config key. It's produced per-issue by the
+# Business Analyst (see qa-engineer.md's "Definition of Done" Output
+# section for how it's consumed) and carried unchanged through Design and
+# Testing — a fixed generic checklist here couldn't capture what a
+# specific issue actually needs to validate.
 # -----------------------------------------------------------------------------
-definitionOfDone:
-  - id: automatedTestsPass
-    description: "All new/modified unit and integration tests pass locally."
-  - id: coverageThresholdMet
-    description: "Coverage on touched code meets testingCoverage, or the gap is explicitly justified."
-  - id: manualValidationExecuted
-    description: "Every manual verification step named in the requirements' Acceptance Criteria or the implementation summary's 'How to Verify' section has actually been executed by the agent (not left as unexecuted prose), with the real observed output recorded."
-  - id: noStrayArtifacts
-    description: "No stray debug output, commented-out code, or temporary files left behind."
 
 # -----------------------------------------------------------------------------
 # HARD INVARIANT (cannot be overridden by any agent, command, skill, or user

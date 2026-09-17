@@ -23,13 +23,23 @@ loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   and type names already present in `src/`, before closing the design
   document — moved from being a lucky catch left to the agent's own
   initiative to an explicit required step.
-- **`definitionOfDone` config key** (`sdlc.config.yaml`) and a matching
-  checklist in the Testing Summary (`qa-engineer`): four default items
-  (automated tests pass, coverage threshold met, manual validation
-  executed, no stray artifacts) that must be filled with real evidence —
-  a command actually run and its actual observed output — never with
-  prose describing what should happen. Closes a gap where an AC like "the
-  API responds 200" stayed as an unexecuted note in a doc.
+- **Definition of Done, carried per issue** (`business-analyst` →
+  `software-architect` → `qa-engineer`): the Business Analyst names, per
+  issue, any check that can only be confirmed against a real external
+  system no pipeline agent has access to (a real API call, a real
+  credential, a live third-party service) as an explicit Definition of
+  Done item, separate from the Acceptance Criteria. The Software
+  Architect carries it forward into the design doc unchanged. The QA
+  Engineer closes it with real evidence — `[x]` only for tests that are
+  actually green or a manual step it actually ran itself (build, curl,
+  CLI) with the real observed output, `[ ]` **PENDIENTE** with a reason
+  for anything that genuinely needs a real external system/credential.
+  Closes a gap where an AC like "the API responds 200" stayed as an
+  unexecuted note in a doc. (First tried as a generic `definitionOfDone`
+  checklist in `sdlc.config.yaml`; replaced with this per-issue,
+  doc-carried design after finding an independent, more mature
+  implementation of the same idea already in production in a downstream
+  repo using this kit — credit due there.)
 - **Acceptance Criteria → Test coverage table** (`qa-engineer`): for
   issues with a formal AC list reachable from the input chain, the
   Testing Summary now includes an explicit table mapping each
@@ -47,10 +57,9 @@ loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - `README.md` (English and Spanish) — new sections documenting fact
-  verification, the naming-collision check, the Definition of Done gate,
-  Acceptance Criteria → Test traceability, and the ambiguity-escalation
-  calibration; `definitionOfDone` row added to the Configuration table;
-  version badge bumped `2.5` → `2.6`.
+  verification, the naming-collision check, the per-issue Definition of
+  Done, Acceptance Criteria → Test traceability, and the
+  ambiguity-escalation calibration; version badge bumped `2.5` → `2.6`.
 
 ### Verified, no action taken
 

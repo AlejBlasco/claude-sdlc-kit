@@ -100,7 +100,10 @@ Edit `.claude/sdlc.config.yaml`:
 | `paths.functionalDocs` | `docs/functional` | Output folder for the functional document from `sdlc-documentation`. |
 | `paths.testing` | `docs/sdlc/testing` | Output folder for `sdlc-testing`'s summary. |
 | `paths.deployment` | `docs/sdlc/deployment` | Output folder for `sdlc-implementation`'s deployment runbook. |
-| `definitionOfDone` | 4 default items (see below) | Checklist the QA Engineer agent fills in with **real evidence** (a command it ran, the output it observed) at the end of `sdlc-testing` — never with prose describing what should happen. Defaults: automated tests pass, coverage threshold met, manual validation executed, no stray debug artifacts. Add your own items (e.g. a linter run, a security scan) the same way. |
+
+There's no `definitionOfDone` config key — Definition of Done is produced
+per issue by the Business Analyst and carried through the pipeline, not a
+fixed generic checklist (see below).
 
 ### 🚀 Usage
 
@@ -192,18 +195,24 @@ runs are now closed earlier in the pipeline:
   the design document — instead of leaving the collision to be
   discovered at compile time during `sdlc-development`.
 
-### ✅ Definition of Done — real evidence, not prose
+### ✅ Definition of Done — carried per issue, closed with real evidence
 
-The Testing phase used to describe a manual validation step (e.g. "the
-API responds 200") as a note in the summary without ever actually running
-it. `sdlc-testing` now closes with a **Definition of Done** checklist
-(configurable via `definitionOfDone`, see Configuration) that the QA
-Engineer must fill in with real evidence: for any Acceptance Criterion or
-"How to Verify" step that describes observable runtime behavior, it
-actually runs the check (starts the app, curls the endpoint, runs the
-command) and records the real output — or leaves the item explicitly
-unchecked with the reason it couldn't be run, instead of marking it done
-on the strength of the code merely looking correct.
+A requirement's AC used to describe a manual validation step (e.g. "the
+API responds 200") that stayed as a note nobody ever actually ran. Now
+the **Business Analyst** names it explicitly, per issue, as a Definition
+of Done item — separate from the Acceptance Criteria, and specifically
+for anything that can only be confirmed against a real external system
+no pipeline agent has access to (a real API call, a real credential,
+live third-party service). The **Software Architect** carries that
+section forward into the design doc unchanged (adding to it only if a
+design decision introduces a new such step). The **QA Engineer** closes
+the loop: for each item, it's checked off `[x]` only with real evidence
+— tests that are actually green, or a manual step it actually ran itself
+(built app, curl, CLI) with the real observed output — and anything that
+genuinely needs a real external system/credential is left `[ ]`
+**PENDIENTE** with the reason, never marked done on the strength of the
+code merely looking correct, and never forced through with a fabricated
+credential.
 
 ### 🧵 Acceptance Criteria → Test traceability
 
@@ -342,7 +351,10 @@ Edita `.claude/sdlc.config.yaml`:
 | `paths.functionalDocs` | `docs/functional` | Carpeta de salida del documento funcional de `sdlc-documentation`. |
 | `paths.testing` | `docs/sdlc/testing` | Carpeta de salida del resumen de `sdlc-testing`. |
 | `paths.deployment` | `docs/sdlc/deployment` | Carpeta de salida del runbook de despliegue de `sdlc-implementation`. |
-| `definitionOfDone` | 4 ítems por defecto (ver abajo) | Checklist que el QA Engineer rellena con **evidencia real** (un comando que ha ejecutado, la salida que ha observado) al cerrar `sdlc-testing` — nunca con prosa describiendo lo que debería pasar. Por defecto: tests automáticos en verde, umbral de cobertura cumplido, validación manual ejecutada, sin artefactos de debug sueltos. Puedes añadir tus propios ítems (p. ej. un linter, un escaneo de seguridad) de la misma forma. |
+
+No existe una clave de config `definitionOfDone` — el Definition of Done
+se genera por issue, a cargo del Business Analyst, y se traslada a través
+del pipeline; no es una checklist genérica fija (ver abajo).
 
 ### 🚀 Uso
 
@@ -441,19 +453,24 @@ ejecuciones reales ahora se cierran antes en el pipeline:
   antes de cerrar el documento de diseño — en vez de dejar que la
   colisión se descubra al compilar durante `sdlc-development`.
 
-### ✅ Definition of Done — evidencia real, no prosa
+### ✅ Definition of Done — trasladado por issue, cerrado con evidencia real
 
-La fase de Testing solía describir un paso de validación manual (p. ej.
-"la API responde 200") como una nota en el resumen sin llegar a
-ejecutarlo nunca. `sdlc-testing` ahora cierra con un checklist de
-**Definition of Done** (configurable vía `definitionOfDone`, ver
-Configuración) que el QA Engineer debe rellenar con evidencia real: para
-cada Criterio de Aceptación o paso de "How to Verify" que describa un
-comportamiento observable en tiempo de ejecución, lo ejecuta de verdad
-(levanta la app, hace curl al endpoint, ejecuta el comando) y anota la
-salida real — o deja el ítem explícitamente sin marcar con el motivo por
-el que no se pudo ejecutar, en vez de darlo por hecho porque el código
-"tiene buena pinta".
+Un Criterio de Aceptación solía describir un paso de validación manual
+(p. ej. "la API responde 200") que se quedaba como una nota que nadie
+llegaba a ejecutar. Ahora el **Business Analyst** lo nombra explícitamente,
+por issue, como un ítem de Definition of Done — separado de los Acceptance
+Criteria, y específicamente para lo que solo puede confirmarse contra un
+sistema externo real al que ningún agente del pipeline tiene acceso (una
+llamada API real, una credencial real, un servicio de terceros en vivo).
+El **Software Architect** traslada esa sección al documento de diseño sin
+tocarla (solo añade si una decisión de diseño introduce un paso nuevo de
+ese tipo). El **QA Engineer** cierra el círculo: cada ítem se marca `[x]`
+solo con evidencia real — tests que están realmente en verde, o un paso
+manual que ha ejecutado él mismo (app levantada, curl, CLI) con la salida
+real observada — y lo que de verdad necesita un sistema externo/credencial
+real se deja `[ ]` **PENDIENTE** con el motivo, nunca dado por hecho
+porque el código "tiene buena pinta", y nunca forzado con una credencial
+inventada.
 
 ### 🧵 Trazabilidad Criterio de Aceptación → Test
 
