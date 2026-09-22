@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.6-blue)
+![Version](https://img.shields.io/badge/version-2.7-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -54,6 +54,7 @@ Copy the `.claude/` folder from this kit into the root of your target repository
 your-repo/
 ├── .claude/
 │   ├── sdlc.config.yaml
+│   ├── RULES.md
 │   ├── agents/
 │   │   ├── business-analyst.md
 │   │   ├── software-architect.md
@@ -212,7 +213,11 @@ the loop: for each item, it's checked off `[x]` only with real evidence
 genuinely needs a real external system/credential is left `[ ]`
 **PENDIENTE** with the reason, never marked done on the strength of the
 code merely looking correct, and never forced through with a fabricated
-credential.
+credential. The **DevOps Engineer**, being the last phase, does one more
+pass on the Deployment Notes runbook — a "Definition of Done — estado
+final" section that re-checks every item and calls out anything still
+open as `[ ] PENDIENTE — DEL USUARIO`, so a requirement can't quietly read
+as "done" once the pipeline closes.
 
 ### 🧵 Acceptance Criteria → Test traceability
 
@@ -225,6 +230,20 @@ used to be a side effect of the Technical Writer reading everything
 downstream — this makes it a deliberate check the QA Engineer produces,
 so a requirement can't silently end up with no test and no manual check
 either.
+
+### 📏 Proportional output
+
+Every agent's document template has sections for things that might not
+apply to every change (a technology table, a diagram, a rollback plan...).
+A shared `.claude/RULES.md` file, read by all six agents right after
+`sdlc.config.yaml` during their startup sequence, tells them to match a
+document's size to the change's size: collapse sections that don't apply
+to one line or "None" instead of padding them out, and don't manufacture
+extra scenarios/risks/deviations just to fill every heading. Small,
+self-contained changes get a short document; anything touching more than
+one layer, introducing a new dependency/port, or matching a roadmap phase
+still gets the full-size treatment. Adding a new shared rule later means
+editing `.claude/RULES.md` once instead of all six agent files.
 
 ### 🧠 Ecosystem skills (.NET 10 / Azure / Blazor)
 
@@ -305,6 +324,7 @@ Copia la carpeta `.claude/` de este kit a la raíz de tu repositorio, fusionánd
 tu-repo/
 ├── .claude/
 │   ├── sdlc.config.yaml
+│   ├── RULES.md
 │   ├── agents/
 │   │   ├── business-analyst.md
 │   │   ├── software-architect.md
@@ -470,7 +490,11 @@ manual que ha ejecutado él mismo (app levantada, curl, CLI) con la salida
 real observada — y lo que de verdad necesita un sistema externo/credencial
 real se deja `[ ]` **PENDIENTE** con el motivo, nunca dado por hecho
 porque el código "tiene buena pinta", y nunca forzado con una credencial
-inventada.
+inventada. El **DevOps Engineer**, al ser la última fase, hace una pasada
+más sobre el runbook de Deployment Notes — una sección "Definition of
+Done — estado final" que revisa cada ítem de nuevo y marca lo que siga
+abierto como `[ ] PENDIENTE — DEL USUARIO`, para que ningún requisito
+quede leído como "hecho" en silencio cuando el pipeline se cierra.
 
 ### 🧵 Trazabilidad Criterio de Aceptación → Test
 
@@ -483,6 +507,22 @@ of Done en su lugar. La cobertura solía ser un efecto colateral de que el
 Technical Writer leyera todo lo anterior — esto la convierte en una
 comprobación deliberada que produce el QA Engineer, para que un requisito
 no pueda quedarse en silencio sin test y sin validación manual tampoco.
+
+### 📏 Salida proporcional
+
+La plantilla de cada agente tiene secciones para cosas que no siempre
+aplican a un cambio (una tabla de tecnologías, un diagrama, un plan de
+rollback...). Un fichero compartido `.claude/RULES.md`, que los seis
+agentes leen justo después de `sdlc.config.yaml` en su startup sequence,
+les indica que ajusten el tamaño del documento al tamaño del cambio:
+colapsar a una línea o "None" las secciones que no aplican, en vez de
+rellenarlas, y no inventar escenarios/riesgos/desviaciones extra solo para
+completar cada apartado. Un cambio pequeño y autocontenido produce un
+documento corto; cualquier cosa que toque más de una capa, introduzca una
+dependencia/puerto nuevo, o corresponda a una fase del roadmap, sigue
+recibiendo el tratamiento completo. Añadir una regla compartida nueva en
+el futuro significa editar `.claude/RULES.md` una vez, no los seis
+ficheros de agente.
 
 ### 🧠 Skills del ecosistema (.NET 10 / Azure / Blazor)
 

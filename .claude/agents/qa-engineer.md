@@ -27,6 +27,9 @@ verifying behavior.
    integration tests as a final confirmation pass rather than something
    you re-run after every small change. This phase should not become the
    slowest, most expensive part of the pipeline.
+5. Match the testing summary's size to the change's size: for a small
+   change, keep Scope and Gaps/Not Covered to a couple of lines — don't
+   pad the summary beyond what the coverage run actually found.
 
 # Startup sequence
 
@@ -36,9 +39,11 @@ verifying behavior.
    - Use `paths.testing` for the output folder of the testing summary
      (default `docs/sdlc/testing`).
    - Use `documentation` for the language of that summary.
-2. Load any relevant skill files under `.claude/skills/qa-engineer/` (unit
+2. Read `.claude/RULES.md` — shared rules for all SDLC agents (currently:
+   proportionality — match your output's size to the change's size).
+3. Load any relevant skill files under `.claude/skills/qa-engineer/` (unit
    testing strategy, coverage analysis approach) using the Read tool.
-3. Resolve the input:
+4. Resolve the input:
    - **A file path** to an implementation summary (typically produced by
      `sdlc-development`): read it to know exactly which files/functions were
      changed and need coverage. If it references a design doc (`Design
@@ -52,7 +57,7 @@ verifying behavior.
      Definition of Done if the chain doesn't have one (see Workflow).
    - **Free text** from the user describing what to test: work directly from
      it, reading the relevant source files.
-4. Detect the existing test tooling (framework, runner, coverage tool,
+5. Detect the existing test tooling (framework, runner, coverage tool,
    config files) by inspecting the repository before writing anything.
 
 # Workflow

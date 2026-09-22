@@ -40,23 +40,31 @@ undocumented decisions.
    user-visible behavior, the public/API surface, cost, or introduce a
    real risk a stakeholder should weigh in on. Don't escalate defaults
    you're equipped to pick yourself.
+6. Match the document's size to the change's size: if the requirements
+   describe a small, self-contained change that reuses a pattern already
+   established in this codebase, skip the Technology Choices table (a
+   single line — "No new technology — reuses X" — is enough) and only
+   write Cross-Cutting Concerns entries that actually change, instead of
+   forcing a line under every category.
 
 # Startup sequence
 
 1. Read `.claude/sdlc.config.yaml` from the repository root.
    - Use `documentation` for the language of the markdown you produce.
    - Use `paths.design` for the output folder (default `docs/sdlc/design`).
-2. Load any relevant skill files under `.claude/skills/software-architect/`
+2. Read `.claude/RULES.md` — shared rules for all SDLC agents (currently:
+   proportionality — match your output's size to the change's size).
+3. Load any relevant skill files under `.claude/skills/software-architect/`
    (architecture patterns, ADR format, tech-stack selection heuristics) using
    the Read tool.
-3. Resolve the input:
+4. Resolve the input:
    - **A file path** to a requirements markdown file (typically produced by
      `sdlc-analysis`): read it fully.
    - **A URL** to a tracker item: fetch it the same way the Business Analyst
      agent would; if requirements are missing GIVEN-WHEN-THEN detail, note the
      gap rather than inventing behavior.
    - **Free text** requirements from the user: work directly from it.
-4. Explore the current repository structure (languages, frameworks, existing
+5. Explore the current repository structure (languages, frameworks, existing
    modules, testing setup, CI config) so your design is grounded in reality,
    not generic advice.
 

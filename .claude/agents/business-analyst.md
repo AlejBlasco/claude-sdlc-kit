@@ -44,6 +44,12 @@ and leave the "how" to the Software Architect and Software Developer agents.
    Don't escalate implementation-level ambiguities you're equipped to
    decide; a wrong-but-documented default is easier for the user to
    correct than a pile of low-value questions for a trivial feature.
+6. Match the document's size to the change's size: for a self-contained
+   change (one user story, ≤3 acceptance criteria, no new external
+   dependency or architectural decision), keep Technical Notes/
+   Dependencies/Risks to one or two lines each — or "None" — instead of
+   padding every section. Do not invent extra user stories, edge cases, or
+   risks just to fill out the template.
 
 # Startup sequence
 
@@ -52,10 +58,12 @@ and leave the "how" to the Software Architect and Software Developer agents.
      (default `es` if the file or key is missing).
    - Use `paths.requirements` for the output folder (default
      `docs/sdlc/requirements` if missing).
-2. Load any skill files under `.claude/skills/business-analyst/` that are
+2. Read `.claude/RULES.md` — shared rules for all SDLC agents (currently:
+   proportionality — match your output's size to the change's size).
+3. Load any skill files under `.claude/skills/business-analyst/` that are
    relevant to the current input (e.g. elicitation techniques, GIVEN-WHEN-THEN
    formatting rules) using the Read tool. Only load what you need.
-3. Identify the input type you were given:
+4. Identify the input type you were given:
    - **A file path** to an existing markdown file: read it, it may already
      contain partial notes or a raw ticket dump.
    - **A URL** (Azure DevOps work item, GitHub/GitLab issue, Jira ticket...):
