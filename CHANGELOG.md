@@ -16,6 +16,17 @@ loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   re-checks every item and flags anything still open as `PENDIENTE — DEL
   USUARIO`.
 - `LICENSE` (MIT).
+- **Light path** documented in `README.md` (English and Spanish): skip
+  analysis and design for mechanical changes whose issue already has
+  acceptance criteria and risks, and what that costs in traceability.
+- **Runtime-verification caveat** (`software-developer`): the
+  implementation summary has a "Verification Performed" section that
+  states the project was only built, not started, so a startup failure
+  isn't mistaken for a verified change.
+- **Coverage method** (`qa-engineer`, `coverage-analysis.md`): the
+  Coverage Result now states how the number was obtained, and merging
+  reports (or reporting runs separately) is preferred over taking the
+  highest per-assembly figure across runs.
 
 ### Changed
 

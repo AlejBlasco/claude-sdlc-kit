@@ -123,6 +123,9 @@ verifying behavior.
 ## Coverage Result
 - Target: <testingCoverage>%
 - Achieved: <measured %> (or "not measured — no coverage tool detected")
+- Method: <how the number was obtained — a single merged report, or the
+  highest per-assembly value across separate runs; see
+  `coverage-analysis.md`>
 
 ## Gaps / Not Covered
 - ... (or "None")

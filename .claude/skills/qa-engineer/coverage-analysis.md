@@ -22,6 +22,19 @@ configured `testingCoverage` threshold.
    loop. Report the final number honestly, even if it's below target after
    reasonable effort.
 
+## When coverage comes from more than one run
+
+Unit and integration subsets usually produce separate reports. Never
+combine them by taking the highest per-assembly figure and presenting it
+as a single total — that overstates coverage.
+
+- If the repo already has a tool that merges reports (e.g.
+  ReportGenerator, Coverlet's merge support), produce one merged report
+  and quote that number.
+- Otherwise, report each run's figure separately, or state explicitly in
+  the Coverage Result's `Method` line that the number is the highest
+  per-assembly value across runs and not a merged total.
+
 ## If no coverage tool exists in the repo
 
 State this clearly in the testing summary instead of guessing a percentage.

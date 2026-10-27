@@ -102,6 +102,13 @@ you actually built.
 ## Deviations from the Design
 - ... (or "None")
 
+## Verification Performed
+- Build: <command run and result>
+- Not verified at runtime: the project was only built, never started or
+  exercised, so a failure at startup (DI wiring, configuration, missing
+  migrations...) would not have been caught here. (Tests are run in
+  `sdlc-testing`.)
+
 ## How to Verify
 <manual steps or commands to check the change works>
 

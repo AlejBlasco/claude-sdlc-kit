@@ -129,6 +129,26 @@ The later phases (`development`, `documentation`, `testing`, `implementation`) w
 
 The natural flow is **analysis → design → development → (documentation and testing, in either order) → implementation**. `sdlc-implementation` prepares/reviews deployment artifacts (Compose stacks, CI/CD pipeline, runbooks) — it never deploys anything itself.
 
+### 🪶 Light path for mechanical changes
+
+For mechanical changes (a framework or dependency upgrade, a rename, a
+config bump) where the issue already carries its acceptance criteria and
+risks, running analysis and design adds little. Skip them and start at
+development, pasting the issue's content as free text (`sdlc-development`
+doesn't fetch URLs):
+
+```
+/sdlc-development <paste the issue: scope, acceptance criteria, risks>
+/sdlc-testing docs/sdlc/development/<generated-summary>.md
+```
+
+What you give up: with no requirements document in the chain, there is no
+formal Acceptance Criteria list or per-issue Definition of Done, so the
+AC → Test table is written as "N/A" and no Definition of Done items are
+carried forward. Put anything that must be checked against a real external
+system in the pasted text, and use the full pipeline if the change alters
+user-visible behavior or touches more than one layer.
+
 ### 🐛 Issue templates
 
 `.github/ISSUE_TEMPLATE/feature_request.md` and `bug_report.md` ship with
@@ -407,6 +427,26 @@ Las fases posteriores (`development`, `documentation`, `testing`, `implementatio
 ```
 
 El flujo natural es **análisis → diseño → desarrollo → (documentación y testing, en cualquier orden) → implementación**. `sdlc-implementation` prepara/revisa artefactos de despliegue (stacks de Compose, pipeline de CI/CD, runbooks) — nunca despliega nada por sí mismo.
+
+### 🪶 Camino ligero para cambios mecánicos
+
+En cambios mecánicos (subir un framework o dependencias, un renombrado,
+un ajuste de configuración) donde el issue ya trae sus criterios de
+aceptación y riesgos, pasar por análisis y diseño aporta poco. Sáltalos y
+empieza en desarrollo, pegando el contenido del issue como texto libre
+(`sdlc-development` no descarga URLs):
+
+```
+/sdlc-development <pega el issue: alcance, criterios de aceptación, riesgos>
+/sdlc-testing docs/sdlc/development/<resumen-generado>.md
+```
+
+Qué pierdes: sin documento de requisitos en la cadena no hay lista formal
+de Acceptance Criteria ni Definition of Done por issue, así que la tabla
+AC → Test se escribe como "N/A" y no se arrastran ítems de Definition of
+Done. Incluye en el texto pegado cualquier cosa que deba comprobarse
+contra un sistema externo real, y usa el pipeline completo si el cambio
+altera comportamiento visible o toca más de una capa.
 
 ### 🐛 Plantillas de Issues
 
