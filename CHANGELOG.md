@@ -3,6 +3,27 @@
 All notable changes to this kit are documented in this file. Format
 loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.7] - 2026-09-22
+
+### Added
+
+- **Shared `.claude/RULES.md`**: rules common to all agents, read by each
+  right after `sdlc.config.yaml` in its startup sequence. First rule:
+  proportional output — match a document's size to the change's size,
+  collapsing non-applicable sections to one line or "None".
+- **Definition of Done final pass** (`devops-engineer`): the deployment
+  runbook closes with a "Definition of Done — estado final" section that
+  re-checks every item and flags anything still open as `PENDIENTE — DEL
+  USUARIO`.
+- `LICENSE` (MIT).
+
+### Changed
+
+- `README.md` (English and Spanish) — documents RULES.md, the DoD final
+  pass and proportional output; corrects the Usage section: only
+  `sdlc-analysis` and `sdlc-design` accept a work-item URL, the other
+  commands take a markdown path or free text.
+
 ## [2.6] - 2026-09-17
 
 ### Added

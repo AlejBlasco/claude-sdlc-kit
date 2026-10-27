@@ -108,11 +108,16 @@ fixed generic checklist (see below).
 
 ### 🚀 Usage
 
-Each command accepts either:
+Every command accepts either:
 
-- 📄 a path to a markdown file produced by a previous phase (chaining the pipeline),
-- 🔗 a URL to a work item (Azure DevOps, GitHub/GitLab Issue, Jira, etc.), or
+- 📄 a path to a markdown file produced by a previous phase (chaining the pipeline), or
 - 💬 a free-text description typed directly after the command.
+
+Only `/sdlc-analysis` and `/sdlc-design` also accept:
+
+- 🔗 a URL to a work item (Azure DevOps, GitHub/GitLab Issue, Jira, etc.), which the agent fetches as its input.
+
+The later phases (`development`, `documentation`, `testing`, `implementation`) work from the documents the earlier phases produced; to feed them a work item directly, paste its content as free text.
 
 ```
 /sdlc-analysis Users should be able to reset their password via email
@@ -283,6 +288,10 @@ the repo.
 
 Every agent, command, and skill in this kit is explicitly instructed to **never** run `git commit`, `git push`, or any equivalent action — under any circumstance, even mid-session user requests. Committing and pushing is always a deliberate, manual action performed by **you**, after reviewing what was generated.
 
+### 📄 License
+
+Released under the [MIT License](LICENSE).
+
 ### 🧩 Extending the kit
 
 - Add more skill files under `.claude/skills/<agent>/` as plain markdown — each agent reads the ones relevant to its current task automatically.
@@ -378,11 +387,16 @@ del pipeline; no es una checklist genérica fija (ver abajo).
 
 ### 🚀 Uso
 
-Cada comando acepta:
+Todos los comandos aceptan:
 
-- 📄 una ruta a un fichero markdown generado por una fase anterior (encadenando el pipeline),
-- 🔗 una URL a un elemento de trabajo (Azure DevOps, GitHub/GitLab Issue, Jira, etc.), o
+- 📄 una ruta a un fichero markdown generado por una fase anterior (encadenando el pipeline), o
 - 💬 una descripción en texto libre escrita directamente tras el comando.
+
+Solo `/sdlc-analysis` y `/sdlc-design` aceptan además:
+
+- 🔗 una URL a un elemento de trabajo (Azure DevOps, GitHub/GitLab Issue, Jira, etc.), que el agente descarga como entrada.
+
+Las fases posteriores (`development`, `documentation`, `testing`, `implementation`) trabajan a partir de los documentos que generaron las fases anteriores; para pasarles un elemento de trabajo directamente, pega su contenido como texto libre.
 
 ```
 /sdlc-analysis Los usuarios deben poder resetear su contraseña por email
@@ -561,6 +575,10 @@ fuera del repositorio.
 ### 🔒 Invariante — nunca commit, nunca push
 
 Todos los agentes, comandos y skills de este kit tienen la instrucción explícita de **no ejecutar nunca** `git commit`, `git push` ni ninguna acción equivalente, bajo ninguna circunstancia, ni siquiera si se pide durante la sesión. Hacer commit y push es siempre una acción manual y deliberada de **la persona usuaria**, tras revisar lo generado.
+
+### 📄 Licencia
+
+Publicado bajo la [licencia MIT](LICENSE).
 
 ### 🧩 Ampliar el kit
 
