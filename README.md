@@ -46,6 +46,24 @@ step.
 |---|---|
 | 🦆 **Rubber Duck** | A Socratic debugging partner. Explain your problem, approach, and assumptions; it only replies with short probing questions ("What else?", "Are you sure?") — never code, never the answer — until you say you've figured it out. |
 
+### ✅ Requirements & limitations
+
+- **Claude Code** with support for project subagents and slash commands
+  (`.claude/agents/` and `.claude/commands/`).
+- **Web access for the Business Analyst and Software Architect.** Their
+  fact-verification step uses `WebSearch`/`WebFetch`; without them they
+  can't check literals (model IDs, package versions, endpoints) against
+  official sources. `/sdlc-analysis` and `/sdlc-design` also need them to
+  fetch a work-item URL.
+- **Stack bias.** The skills are tuned for .NET 10, Azure, Blazor and
+  Docker/Portainer. On another stack the agents still run, but the skill
+  files add little; add your own under `.claude/skills/<agent>/`.
+- **Toolchain on your machine.** The developer builds the project and the
+  QA Engineer runs your test and coverage tools; they use whatever the
+  repo already has and don't install new ones.
+- **Reload after copying.** Restart Claude Code in the target repo so it
+  picks up the new agents and commands.
+
 ### 📦 Installation
 
 Copy the `.claude/` folder from this kit into the root of your target repository, merging with any existing `.claude/` folder you already have (don't overwrite unrelated files):
@@ -344,6 +362,24 @@ use) en lugar de como paso del pipeline.
 | Agente | Propósito |
 |---|---|
 | 🦆 **Rubber Duck** | Compañero de debugging socrático. Le explicas tu problema, tu enfoque y tus suposiciones; solo responde con preguntas cortas ("¿Qué más?", "¿Seguro?") — nunca código, nunca la respuesta — hasta que dices que ya lo has resuelto. |
+
+### ✅ Requisitos y límites
+
+- **Claude Code** con soporte para subagentes y slash commands de proyecto
+  (`.claude/agents/` y `.claude/commands/`).
+- **Acceso web para el Business Analyst y el Software Architect.** Su
+  paso de verificación de hechos usa `WebSearch`/`WebFetch`; sin ellos no
+  pueden contrastar literales (IDs de modelo, versiones de paquete,
+  endpoints) con fuentes oficiales. `/sdlc-analysis` y `/sdlc-design`
+  también los necesitan para descargar la URL de un elemento de trabajo.
+- **Sesgo de stack.** Las skills están orientadas a .NET 10, Azure,
+  Blazor y Docker/Portainer. En otro stack los agentes funcionan, pero las
+  skills aportan poco; añade las tuyas en `.claude/skills/<agente>/`.
+- **Toolchain en tu máquina.** El developer compila el proyecto y el QA
+  Engineer ejecuta tus herramientas de test y cobertura; usan lo que el
+  repo ya tenga y no instalan nada nuevo.
+- **Recarga tras copiar.** Reinicia Claude Code en el repo de destino para
+  que reconozca los nuevos agentes y comandos.
 
 ### 📦 Instalación
 

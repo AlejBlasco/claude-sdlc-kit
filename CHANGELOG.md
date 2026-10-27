@@ -15,7 +15,10 @@ loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   runbook closes with a "Definition of Done — estado final" section that
   re-checks every item and flags anything still open as `PENDIENTE — DEL
   USUARIO`.
-- `LICENSE` (MIT).
+- `LICENSE` (MIT), `.gitignore` and `.gitattributes` (LF line endings).
+- "Requirements & limitations" section in `README.md` (English and
+  Spanish): web access for fact verification, .NET-oriented skills, repo
+  toolchain, reload after install.
 - **Light path** documented in `README.md` (English and Spanish): skip
   analysis and design for mechanical changes whose issue already has
   acceptance criteria and risks, and what that costs in traceability.
