@@ -330,6 +330,27 @@ the repo.
 
 Every agent, command, and skill in this kit is explicitly instructed to **never** run `git commit`, `git push`, or any equivalent action — under any circumstance, even mid-session user requests. Committing and pushing is always a deliberate, manual action performed by **you**, after reviewing what was generated.
 
+### 🧪 Validating the kit (level 1 — static)
+
+The repo checks its own consistency. This is for people changing the kit; it is not part of what you copy into your repository.
+
+```
+python scripts/check_kit.py
+```
+
+It needs only Python 3 and git, prints one `FAIL <file>: <reason>` line per problem and exits with code 1 if any check fails. The same script runs in GitHub Actions (workflow `Validate`) on every pull request and on pushes to `master`, and the `validate` check is required to merge into `master`. Run it locally before opening a PR; it also sees new, not-yet-committed files.
+
+| Area | What is checked |
+|---|---|
+| Agents and commands | Frontmatter keys present (`name`, `description`, `model`, `color` for agents; `description`, `argument-hint` for commands); an agent's `name` equals its file name. |
+| Paths | Every `.claude/...` path mentioned in an agent, command or skill exists. |
+| Skills | Each folder under `.claude/skills/` has a matching agent; each skill starts with `# Skill:` and has a "Load this skill" line near the top; backticked references to other skills resolve. |
+| Links | Relative markdown links in every `.md` file point to something that exists. |
+| Third-party material | Skills with a `Source:` header and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) list the same files. |
+| README | Both install trees (EN and ES) match the real files under `.claude/` and `.github/`, and the version badge matches the latest numbered [CHANGELOG](CHANGELOG.md) entry. |
+
+This is level 1 of the validation system tracked in issue #6; the levels that need a model (does a skill activate when it should, does it do what it should) are not implemented yet.
+
 ### 📄 License
 
 Released under the [MIT License](LICENSE).
@@ -661,6 +682,27 @@ fuera del repositorio.
 ### 🔒 Invariante — nunca commit, nunca push
 
 Todos los agentes, comandos y skills de este kit tienen la instrucción explícita de **no ejecutar nunca** `git commit`, `git push` ni ninguna acción equivalente, bajo ninguna circunstancia, ni siquiera si se pide durante la sesión. Hacer commit y push es siempre una acción manual y deliberada de **la persona usuaria**, tras revisar lo generado.
+
+### 🧪 Validar el kit (nivel 1 — estático)
+
+El repo comprueba su propia consistencia. Es para quien modifica el kit; no forma parte de lo que copias a tu repositorio.
+
+```
+python scripts/check_kit.py
+```
+
+Solo necesita Python 3 y git, imprime una línea `FAIL <archivo>: <motivo>` por cada problema y termina con código 1 si falla alguna comprobación. El mismo script se ejecuta en GitHub Actions (workflow `Validate`) en cada pull request y en cada push a `master`, y el check `validate` es obligatorio para mergear en `master`. Ejecútalo en local antes de abrir un PR; también ve los archivos nuevos que aún no has commiteado.
+
+| Área | Qué se comprueba |
+|---|---|
+| Agentes y comandos | Claves de frontmatter presentes (`name`, `description`, `model`, `color` en agentes; `description`, `argument-hint` en comandos); el `name` de un agente coincide con su nombre de archivo. |
+| Rutas | Toda ruta `.claude/...` mencionada en un agente, comando o skill existe. |
+| Skills | Cada carpeta de `.claude/skills/` tiene su agente; cada skill empieza por `# Skill:` y tiene una línea "Load this skill" al principio; las referencias entre skills entre comillas invertidas se resuelven. |
+| Enlaces | Los enlaces markdown relativos de cualquier `.md` apuntan a algo que existe. |
+| Material de terceros | Los skills con cabecera `Source:` y [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) listan los mismos archivos. |
+| README | Los dos árboles de instalación (EN y ES) coinciden con los archivos reales de `.claude/` y `.github/`, y el badge de versión coincide con la última entrada numerada del [CHANGELOG](CHANGELOG.md). |
+
+Este es el nivel 1 del sistema de validación de la issue #6; los niveles que necesitan un modelo (si un skill se activa cuando debe, si hace lo que debe) aún no están implementados.
 
 ### 📄 Licencia
 

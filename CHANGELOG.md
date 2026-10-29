@@ -3,6 +3,23 @@
 All notable changes to this kit are documented in this file. Format
 loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+
+- `scripts/check_kit.py` (level 1, static validation) now also checks skills:
+  folder matches an agent, `# Skill:` title, a "Load this skill" line near
+  the top, references between skills, relative markdown links in every
+  `.md` file, and that skills with a `Source:` header match
+  `THIRD_PARTY_NOTICES.md`.
+- `README.md` (English and Spanish) — new "Validating the kit" section
+  documenting `python scripts/check_kit.py` and what it checks.
+
+### Fixed
+
+- `custom-server-docker-portainer-cicd.md` cited
+  `dotnet-solution-structure.md` without its `software-architect/` folder.
+
 ## [2.8] - 2026-10-29
 
 ### Added

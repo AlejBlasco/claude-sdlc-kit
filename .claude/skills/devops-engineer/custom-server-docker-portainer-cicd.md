@@ -21,7 +21,7 @@ See `azure-devops-cicd.md` instead for cloud/Azure targets.
 
 This kit assumes **one Portainer node** (the custom server) running
 **multiple stacks** (one per application/environment) — see
-`dotnet-solution-structure.md`'s counterpart for infra: don't create extra
+`software-architect/dotnet-solution-structure.md`'s counterpart for infra: don't create extra
 nodes just to "use up" Portainer's node allowance; a single physical
 server splitting itself into VMs doesn't add real fault tolerance, it just
 adds overhead. Add a new node only when there's genuinely new physical/VM
