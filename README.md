@@ -10,7 +10,7 @@
 ![Azure](https://img.shields.io/badge/Azure-Ready-0078D4?logo=microsoftazure&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 ![Agile](https://img.shields.io/badge/Process-Agile-3DDC97)
-![Version](https://img.shields.io/badge/version-2.7-blue)
+![Version](https://img.shields.io/badge/version-2.8-blue)
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
@@ -192,6 +192,8 @@ matches the user's existing workflow. Full reference: [GitHub Docs —
 Configuring issue templates for your
 repository](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository).
 
+In this kit's own repo, `config.yml` sets `blank_issues_enabled: false`, so only the two templates are offered, and `.github/pull_request_template.md` gives PRs a checklist (see [CONTRIBUTING.md](CONTRIBUTING.md)). Both are specific to the kit's repo and are not part of what you copy into yours.
+
 ### 🔁 Closing the loop on open questions
 
 `sdlc-analysis` and `sdlc-design` don't just drop open questions/risks into
@@ -330,9 +332,12 @@ Every agent, command, and skill in this kit is explicitly instructed to **never*
 
 Released under the [MIT License](LICENSE).
 
+The MIT license covers only the original work in this repo. Some skills are adapted from third-party material under their own licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 ### 🧩 Extending the kit
 
 - Add more skill files under `.claude/skills/<agent>/` as plain markdown — each agent reads the ones relevant to its current task automatically.
+- Contributing? Read [CONTRIBUTING.md](CONTRIBUTING.md) first (conventions, changelog, bilingual README, no-commit invariant).
 - `devops-engineer` / `sdlc-implementation` now prepares real deployment artifacts (Azure or self-hosted Docker/Portainer) but still never executes anything against a remote host — extend its skills under `.claude/skills/devops-engineer/` for other targets (e.g. a different cloud, Kubernetes) the same way.
 
 ---
@@ -512,6 +517,8 @@ flujo de trabajo real del usuario. Referencia completa: [GitHub Docs —
 Configuring issue templates for your
 repository](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository).
 
+En el propio repo del kit, `config.yml` fija `blank_issues_enabled: false`, de modo que solo se ofrecen las dos plantillas, y `.github/pull_request_template.md` da a los PRs un checklist (ver [CONTRIBUTING.md](CONTRIBUTING.md)). Ambos son propios del repo del kit y no forman parte de lo que copias al tuyo.
+
 ### 🔁 Cierre de puntos abiertos
 
 `sdlc-analysis` y `sdlc-design` no se limitan a dejar preguntas o riesgos
@@ -656,8 +663,11 @@ Todos los agentes, comandos y skills de este kit tienen la instrucción explíci
 
 Publicado bajo la [licencia MIT](LICENSE).
 
+La licencia MIT cubre únicamente el trabajo original de este repo. Algunas skills están adaptadas de material de terceros bajo sus propias licencias; consulta [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 ### 🧩 Ampliar el kit
 
 - Añade más skills en `.claude/skills/<agente>/` como markdown plano — cada agente ya está instruido para leer los que sean relevantes para su tarea.
+- ¿Quieres contribuir? Lee primero [CONTRIBUTING.md](CONTRIBUTING.md) (convenciones, changelog, README bilingüe, invariante de no commit).
 - `devops-engineer` / `sdlc-implementation` ahora prepara artefactos de despliegue reales (Azure o Docker/Portainer self-hosted), pero sigue sin ejecutar nunca nada contra un host remoto — amplía sus skills en `.claude/skills/devops-engineer/` para otros destinos (otra nube, Kubernetes...) de la misma forma.
 

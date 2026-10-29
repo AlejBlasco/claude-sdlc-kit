@@ -3,6 +3,29 @@
 All notable changes to this kit are documented in this file. Format
 loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.8] - 2026-10-29
+
+### Added
+
+- **`THIRD_PARTY_NOTICES.md`** and **`LICENSES/Apache-2.0.txt`**: one place
+  listing every third-party-derived skill with its source, author and
+  license, checked against the upstream repositories (Taste Skill, MIT;
+  emilkowalski/skills, MIT; Impeccable, Apache-2.0). Includes the MIT
+  notices and the Apache-2.0 license copy and change statement.
+- **`CONTRIBUTING.md`**: short guide on adding skills, the CHANGELOG and
+  version-badge rule, bilingual README, and the no-commit/no-push invariant.
+- **`.github/ISSUE_TEMPLATE/config.yml`** (blank issues disabled) and
+  **`.github/pull_request_template.md`** with the contribution checklist.
+  Both are specific to the kit's own repo, not part of the files users copy.
+
+### Changed
+
+- `design-modes.md` header now states it is a modified derivative and
+  points to `THIRD_PARTY_NOTICES.md` (Apache-2.0 modification notice).
+- `README.md` (English and Spanish) — links the notices file and
+  `CONTRIBUTING.md`, says the MIT license covers only original work, and
+  documents `config.yml` and the PR template.
+
 ## [2.7] - 2026-09-22
 
 ### Added

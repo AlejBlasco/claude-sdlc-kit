@@ -5,6 +5,8 @@ Source: conceptual framework from Paul Bakaus's
 full tool is a heavyweight CLI with its own scripts and 35 reference
 playbooks, out of scope for this kit — this file keeps only the
 classification idea, which is genuinely useful on its own.
+Modified and condensed from the original; see `THIRD_PARTY_NOTICES.md`
+for the license and the changes made.
 
 Load this skill before starting any UI-heavy work, to decide what kind
 of interface you're actually building — this determines which other
