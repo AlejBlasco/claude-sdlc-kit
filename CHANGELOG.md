@@ -17,6 +17,9 @@ loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **`.github/ISSUE_TEMPLATE/config.yml`** (blank issues disabled) and
   **`.github/pull_request_template.md`** with the contribution checklist.
   Both are specific to the kit's own repo, not part of the files users copy.
+- **Release process** in `CONTRIBUTING.md` (badge, CHANGELOG, tag, release) and a
+  Releases link in the README header. Tagging starts at `v2.8`, with no
+  retroactive tags for earlier versions.
 - **`scripts/check_kit.py`** and **`.github/workflows/validate.yml`**: CI that runs on
   pull requests and pushes to `master`. Checks agent/command frontmatter,
   that every `.claude/` path they mention exists, that the README install
