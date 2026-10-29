@@ -15,7 +15,7 @@
 ![No Git Autopilot](https://img.shields.io/badge/git%20commit%2Fpush-never%20automatic-critical)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4)
 
-**[English](#-english)** • **[Español](#-español)**
+**[English](#-english)** • **[Español](#-español)** • **[Releases](https://github.com/AlejBlasco/claude-sdlc-kit/releases/latest)**
 
 </div>
 
