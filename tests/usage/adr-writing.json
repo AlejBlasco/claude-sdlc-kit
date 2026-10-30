@@ -1,0 +1,63 @@
+{
+  "agent": "software-architect",
+  "skill": "adr-writing",
+  "note": "Sentence counts are a heuristic (split on end punctuation and line breaks). The negative case guards against the format being applied to a trivial edit.",
+  "cases": [
+    {
+      "id": "adr-001",
+      "prompt": "We are writing the design document for a new product. Add the part that covers the database choice between PostgreSQL and SQL Server. It would be expensive to reverse later and two teams will build on it, so record why we chose what we chose.",
+      "checks": [
+        {
+          "id": "has-context-decision-consequences",
+          "type": "sections_present",
+          "labels": [
+            "context",
+            "decision",
+            "consequences"
+          ]
+        },
+        {
+          "id": "decision-is-one-sentence",
+          "type": "section_sentences",
+          "labels": [
+            "context",
+            "decision",
+            "consequences"
+          ],
+          "section": "decision",
+          "min": 1,
+          "max": 1,
+          "heuristic": true
+        },
+        {
+          "id": "three-to-six-sentences-total",
+          "type": "sections_total",
+          "labels": [
+            "context",
+            "decision",
+            "consequences"
+          ],
+          "min": 3,
+          "max": 6,
+          "heuristic": true
+        },
+        {
+          "id": "no-separate-adr-file",
+          "type": "absent",
+          "pattern": "(?i)docs/adr|\\badr[-_]?\\d{1,4}[\\w-]*\\.md"
+        }
+      ]
+    },
+    {
+      "id": "adr-002",
+      "prompt": "In the design document, rename the \"orders\" section to \"sales\". Show the updated heading and its first line.",
+      "checks": [
+        {
+          "id": "no-adr-format-on-a-rename",
+          "type": "absent",
+          "pattern": "(?im)^[#*_\\s\\-]*(context|consequences)\\b"
+        }
+      ]
+    }
+  ]
+}

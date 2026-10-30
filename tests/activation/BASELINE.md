@@ -14,6 +14,15 @@ Date: 2026-10-30.
 | qa-engineer | 15 | 51/51 | 0/93 | 0 |
 | technical-writer | 11 | 36/36 | 3/33 | 0 |
 | software-developer | 43 | 108/108 | 2/219 | 0 |
+| delegation (which subagent the main assistant picks) | 16 | 39/39 | 0/114 | 0 |
+
+`delegation` was run with `--agent delegation`; the model sees only each
+agent's name and description. Two of its cases were loosened after the first
+run (`del-010`, `del-016`) because the expectation was stricter than the agent
+descriptions justify; the first run gave 38/42 and 2/117.
+
+The per-case numbers behind these tables are in `baseline.json`, which
+`--strict` compares against.
 
 ## Known misses (open)
 

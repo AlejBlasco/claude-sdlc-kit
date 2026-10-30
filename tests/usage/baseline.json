@@ -1,0 +1,44 @@
+{
+  "adr-writing": {
+    "model": "claude-haiku-5-5",
+    "runs": 5,
+    "verdict": "FAILS",
+    "recorded": "2026-10-30",
+    "cases": {
+      "adr-001": 0.2,
+      "adr-002": 1.0
+    }
+  },
+  "given-when-then-format": {
+    "model": "claude-haiku-5-5",
+    "runs": 5,
+    "verdict": "PASSES",
+    "recorded": "2026-10-30",
+    "cases": {
+      "gwt-001": 1.0,
+      "gwt-002": 1.0
+    }
+  },
+  "mermaid-diagramming": {
+    "model": "claude-haiku-5-5",
+    "runs": 5,
+    "verdict": "PASSES",
+    "recorded": "2026-10-30",
+    "cases": {
+      "mer-001": 1.0,
+      "mer-002": 1.0,
+      "mer-003": 1.0
+    }
+  },
+  "unit-testing-strategy": {
+    "model": "claude-haiku-5-5",
+    "runs": 5,
+    "verdict": "PASSES",
+    "recorded": "2026-10-30",
+    "cases": {
+      "ut-001": 1.0,
+      "ut-002": 0.8,
+      "ut-003": 0.8
+    }
+  }
+}

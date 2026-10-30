@@ -1,0 +1,53 @@
+{
+  "agent": "business-analyst",
+  "skill": "given-when-then-format",
+  "note": "Checks the shape of the acceptance criteria only. Whether the criteria cover a happy path, an edge case and a negative case is not checked (it needs a judge); the scenario count is a rough proxy.",
+  "cases": [
+    {
+      "id": "gwt-001",
+      "prompt": "This is a checklist item from a feature request for a CSV event importer: \"- [ ] System handles parsing errors and displays clear messages\". Write the acceptance criteria for it.",
+      "checks": [
+        {
+          "id": "two-or-more-scenarios",
+          "type": "present",
+          "pattern": "(?im)^\\W*GIVEN\\b",
+          "min": 2
+        },
+        {
+          "id": "one-when-per-scenario",
+          "type": "blocks_exactly",
+          "start": "(?im)^\\W*GIVEN\\b",
+          "pattern": "(?im)^\\W*WHEN\\b",
+          "exactly": 1
+        }
+      ]
+    },
+    {
+      "id": "gwt-002",
+      "prompt": "Write the acceptance criteria for this story: \"As a customer I want to apply a discount code at checkout so that I pay less.\"",
+      "checks": [
+        {
+          "id": "three-or-more-scenarios",
+          "type": "present",
+          "pattern": "(?im)^\\W*GIVEN\\b",
+          "min": 3,
+          "heuristic": true
+        },
+        {
+          "id": "one-when-per-scenario",
+          "type": "blocks_exactly",
+          "start": "(?im)^\\W*GIVEN\\b",
+          "pattern": "(?im)^\\W*WHEN\\b",
+          "exactly": 1
+        },
+        {
+          "id": "one-then-per-scenario",
+          "type": "blocks_exactly",
+          "start": "(?im)^\\W*GIVEN\\b",
+          "pattern": "(?im)^\\W*THEN\\b",
+          "exactly": 1
+        }
+      ]
+    }
+  ]
+}

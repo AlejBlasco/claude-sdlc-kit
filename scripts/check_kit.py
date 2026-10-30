@@ -7,8 +7,9 @@ Exits 1 if any check fails; prints one line per problem.
 Level 1 (static) checks:
   1. Frontmatter of every agent and command.
   2. Every `.claude/...` path mentioned in agents, commands and skills exists.
-  3. Skill structure: folder matches an agent, `# Skill:` title and a
-     "Load this skill" line near the top, and sibling-skill references resolve.
+  3. Skill structure: folder matches an agent (kit-only folders listed in
+     REPO_ONLY excepted), `# Skill:` title and a "Load this skill" line near
+     the top, and sibling-skill references resolve.
   4. Relative markdown links in every .md file resolve.
   5. Third-party skills (`Source:` header) and THIRD_PARTY_NOTICES.md agree.
   6. The install trees in the README (EN and ES) match the real files.
@@ -32,6 +33,7 @@ REPO_ONLY = (
     ".github/ISSUE_TEMPLATE/config.yml",
     ".github/pull_request_template.md",
     ".github/workflows/",
+    ".claude/skills/kit-validation/",  # maintainer-only skill; it runs scripts/ and tests/, which users do not get
 )
 
 TREE_ROOTS = ("your-repo/", "tu-repo/")
@@ -107,6 +109,8 @@ def skill_files():
 def check_skills(errors):
     skills_dir = ROOT / ".claude/skills"
     for folder in sorted(p for p in skills_dir.iterdir() if p.is_dir()):
+        if f".claude/skills/{folder.name}/" in REPO_ONLY:
+            continue  # kit-only skill folder: no agent owns it
         if not (ROOT / ".claude/agents" / f"{folder.name}.md").exists():
             errors.append(
                 f".claude/skills/{folder.name}/: no agent .claude/agents/{folder.name}.md"

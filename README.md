@@ -330,26 +330,36 @@ the repo.
 
 Every agent, command, and skill in this kit is explicitly instructed to **never** run `git commit`, `git push`, or any equivalent action — under any circumstance, even mid-session user requests. Committing and pushing is always a deliberate, manual action performed by **you**, after reviewing what was generated.
 
-### 🧪 Validating the kit (level 1 — static)
+### 🧪 Validating the kit (three levels)
 
-The repo checks its own consistency. This is for people changing the kit; it is not part of what you copy into your repository.
+The repo checks its own consistency. This is for people changing the kit; it is not part of what you copy into your repository. There are three levels:
 
-```
-python scripts/check_kit.py
-```
+| Level | Question | Command | Needs a model | In CI |
+|---|---|---|---|---|
+| 1. Static | Is the kit consistent? | `python scripts/check_kit.py` | no | yes, required |
+| 2. Activation | Does an agent pick the right skill, and does the main assistant pick the right agent? | `python scripts/eval_activation.py --agent <agent>`, or `--agent delegation` | yes | no, manual |
+| 3. Usage | With the skill loaded, does the output follow its rules, and better than without it? | `python scripts/eval_usage.py --runs 5` | yes | no, manual |
 
-It needs only Python 3 and git, prints one `FAIL <file>: <reason>` line per problem and exits with code 1 if any check fails. The same script runs in GitHub Actions (workflow `Validate`) on every pull request and on pushes to `master`, and the `validate` check is required to merge into `master`. Run it locally before opening a PR; it also sees new, not-yet-committed files.
+**Level 1 — static.** It needs only Python 3 and git, prints one `FAIL <file>: <reason>` line per problem and exits with code 1 if any check fails. The same script runs in GitHub Actions (workflow `Validate`) on every pull request and on pushes to `master`, and the `validate` check is required to merge into `master`. Run it locally before opening a PR; it also sees new, not-yet-committed files.
 
 | Area | What is checked |
 |---|---|
 | Agents and commands | Frontmatter keys present (`name`, `description`, `model`, `color` for agents; `description`, `argument-hint` for commands); an agent's `name` equals its file name. |
 | Paths | Every `.claude/...` path mentioned in an agent, command or skill exists. |
-| Skills | Each folder under `.claude/skills/` has a matching agent; each skill starts with `# Skill:` and has a "Load this skill" line near the top; backticked references to other skills resolve. |
+| Skills | Each folder under `.claude/skills/` has a matching agent (except `kit-validation`, the maintainer-only skill); each skill starts with `# Skill:` and has a "Load this skill" line near the top; backticked references to other skills resolve. |
 | Links | Relative markdown links in every `.md` file point to something that exists. |
 | Third-party material | Skills with a `Source:` header and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) list the same files. |
 | README | Both install trees (EN and ES) match the real files under `.claude/` and `.github/`, and the version badge matches the latest numbered [CHANGELOG](CHANGELOG.md) entry. |
 
-This is level 1 of the validation system tracked in issue #6; the levels that need a model (does a skill activate when it should, does it do what it should) are not implemented yet.
+**Level 2 — activation.** `scripts/eval_activation.py` simulates the step where an agent decides which skills to read: the model sees the agent's own "load relevant skills" instruction, a catalog with each skill's title and opening paragraph, and one task prompt, and answers with the files it would load. The answers are scored against the cases in `tests/activation/<agent>.json` (skills expected, forbidden and tolerated): recall and false positives per skill. `--agent delegation` does the same for the main assistant choosing a subagent from the agents' names and descriptions. `--dry-run` validates the cases and estimates the cost without calling a model.
+
+**Level 3 — usage.** `scripts/eval_usage.py` runs each task in `tests/usage/<skill>.json` twice, with the skill file in the prompt and without it, and applies deterministic checks to the replies (regular expressions and structure rules; there is no judge model). A skill *passes* if its checks hold and it does better than the run without it, has *no effect* if they hold either way, and *fails* if they do not hold with the skill. It starts with four skills: `given-when-then-format`, `adr-writing`, `mermaid-diagramming` and `unit-testing-strategy`. It checks the shape of the reply, not whether the reply is good; it cannot tell, for example, whether a Mermaid diagram renders.
+
+**Running levels 2 and 3.** Both scripts need only Python 3. `--backend cli` (the default) runs `claude -p` with your Claude account, with no per-token charge; `--backend api` calls the Messages API and needs `ANTHROPIC_API_KEY`. The default model is `claude-haiku-5-5`. Expect about 3 seconds per call: from 1 to 7 minutes per agent at level 2 and about 5 minutes for level 3 with `--runs 5`. They are not required checks in CI: they cost something, take minutes and vary between runs.
+
+**Baseline and regressions.** The recorded results are in [tests/activation/BASELINE.md](tests/activation/BASELINE.md) and [tests/usage/BASELINE.md](tests/usage/BASELINE.md), with the per-case numbers in the `baseline.json` next to each. `--write-baseline` records a run. `--strict` exits with code 1 only if a case that held in the baseline no longer holds, so the misses already recorded do not fail it. A drop of one or two runs in a single case is within the noise: repeat that case with `--case <id>` before acting on it.
+
+**The maintainer skill.** [validating-the-kit.md](.claude/skills/kit-validation/validating-the-kit.md) tells Claude how to run these levels, which ones to run for each kind of change and how to report the results; ask Claude to validate the kit following that file. It is not copied into your repository.
 
 ### 📄 License
 
@@ -683,26 +693,36 @@ fuera del repositorio.
 
 Todos los agentes, comandos y skills de este kit tienen la instrucción explícita de **no ejecutar nunca** `git commit`, `git push` ni ninguna acción equivalente, bajo ninguna circunstancia, ni siquiera si se pide durante la sesión. Hacer commit y push es siempre una acción manual y deliberada de **la persona usuaria**, tras revisar lo generado.
 
-### 🧪 Validar el kit (nivel 1 — estático)
+### 🧪 Validar el kit (tres niveles)
 
-El repo comprueba su propia consistencia. Es para quien modifica el kit; no forma parte de lo que copias a tu repositorio.
+El repo comprueba su propia consistencia. Es para quien modifica el kit; no forma parte de lo que copias a tu repositorio. Hay tres niveles:
 
-```
-python scripts/check_kit.py
-```
+| Nivel | Pregunta | Comando | Necesita modelo | En CI |
+|---|---|---|---|---|
+| 1. Estático | ¿Es consistente el kit? | `python scripts/check_kit.py` | no | sí, obligatorio |
+| 2. Activación | ¿Un agente elige el skill correcto, y el asistente principal elige el agente correcto? | `python scripts/eval_activation.py --agent <agente>`, o `--agent delegation` | sí | no, manual |
+| 3. Uso | Con el skill cargado, ¿la salida sigue sus reglas, y mejor que sin él? | `python scripts/eval_usage.py --runs 5` | sí | no, manual |
 
-Solo necesita Python 3 y git, imprime una línea `FAIL <archivo>: <motivo>` por cada problema y termina con código 1 si falla alguna comprobación. El mismo script se ejecuta en GitHub Actions (workflow `Validate`) en cada pull request y en cada push a `master`, y el check `validate` es obligatorio para mergear en `master`. Ejecútalo en local antes de abrir un PR; también ve los archivos nuevos que aún no has commiteado.
+**Nivel 1 — estático.** Solo necesita Python 3 y git, imprime una línea `FAIL <archivo>: <motivo>` por cada problema y termina con código 1 si falla alguna comprobación. El mismo script se ejecuta en GitHub Actions (workflow `Validate`) en cada pull request y en cada push a `master`, y el check `validate` es obligatorio para mergear en `master`. Ejecútalo en local antes de abrir un PR; también ve los archivos nuevos que aún no has commiteado.
 
 | Área | Qué se comprueba |
 |---|---|
 | Agentes y comandos | Claves de frontmatter presentes (`name`, `description`, `model`, `color` en agentes; `description`, `argument-hint` en comandos); el `name` de un agente coincide con su nombre de archivo. |
 | Rutas | Toda ruta `.claude/...` mencionada en un agente, comando o skill existe. |
-| Skills | Cada carpeta de `.claude/skills/` tiene su agente; cada skill empieza por `# Skill:` y tiene una línea "Load this skill" al principio; las referencias entre skills entre comillas invertidas se resuelven. |
+| Skills | Cada carpeta de `.claude/skills/` tiene su agente (salvo `kit-validation`, el skill solo para maintainers); cada skill empieza por `# Skill:` y tiene una línea "Load this skill" al principio; las referencias entre skills entre comillas invertidas se resuelven. |
 | Enlaces | Los enlaces markdown relativos de cualquier `.md` apuntan a algo que existe. |
 | Material de terceros | Los skills con cabecera `Source:` y [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) listan los mismos archivos. |
 | README | Los dos árboles de instalación (EN y ES) coinciden con los archivos reales de `.claude/` y `.github/`, y el badge de versión coincide con la última entrada numerada del [CHANGELOG](CHANGELOG.md). |
 
-Este es el nivel 1 del sistema de validación de la issue #6; los niveles que necesitan un modelo (si un skill se activa cuando debe, si hace lo que debe) aún no están implementados.
+**Nivel 2 — activación.** `scripts/eval_activation.py` simula el paso en el que un agente decide qué skills leer: el modelo ve la propia instrucción del agente de "cargar los skills relevantes", un catálogo con el título y el párrafo inicial de cada skill, y un prompt de tarea, y responde con los archivos que cargaría. Las respuestas se puntúan contra los casos de `tests/activation/<agente>.json` (skills esperados, prohibidos y tolerados): recall y falsos positivos por skill. `--agent delegation` hace lo mismo para el asistente principal cuando elige un subagente a partir de los nombres y descripciones de los agentes. `--dry-run` valida los casos y estima el coste sin llamar a ningún modelo.
+
+**Nivel 3 — uso.** `scripts/eval_usage.py` ejecuta cada tarea de `tests/usage/<skill>.json` dos veces, con el archivo del skill en el prompt y sin él, y aplica comprobaciones deterministas a las respuestas (expresiones regulares y reglas de estructura; no hay modelo juez). Un skill *pasa* si sus comprobaciones se cumplen y mejora a la ejecución sin él, *no tiene efecto* si se cumplen en ambos casos, y *falla* si no se cumplen con el skill. Arranca con cuatro skills: `given-when-then-format`, `adr-writing`, `mermaid-diagramming` y `unit-testing-strategy`. Comprueba la forma de la respuesta, no si es buena; por ejemplo, no puede saber si un diagrama Mermaid se renderiza.
+
+**Ejecutar los niveles 2 y 3.** Los dos scripts solo necesitan Python 3. `--backend cli` (por defecto) ejecuta `claude -p` con tu cuenta de Claude, sin cargo por token; `--backend api` llama a la Messages API y necesita `ANTHROPIC_API_KEY`. El modelo por defecto es `claude-haiku-5-5`. Calcula unos 3 segundos por llamada: de 1 a 7 minutos por agente en el nivel 2 y unos 5 minutos en el nivel 3 con `--runs 5`. No son checks obligatorios en CI: cuestan algo, tardan minutos y varían entre ejecuciones.
+
+**Línea base y regresiones.** Los resultados registrados están en [tests/activation/BASELINE.md](tests/activation/BASELINE.md) y [tests/usage/BASELINE.md](tests/usage/BASELINE.md), con las cifras por caso en el `baseline.json` de al lado. `--write-baseline` registra una ejecución. `--strict` termina con código 1 solo si un caso que se mantenía en la línea base deja de mantenerse, así que los fallos ya registrados no lo hacen fallar. Una caída de una o dos ejecuciones en un solo caso entra en el ruido: repite ese caso con `--case <id>` antes de actuar.
+
+**El skill para maintainers.** [validating-the-kit.md](.claude/skills/kit-validation/validating-the-kit.md) explica a Claude cómo ejecutar estos niveles, cuáles ejecutar según el tipo de cambio y cómo informar de los resultados; pídele a Claude que valide el kit siguiendo ese archivo. No se copia a tu repositorio.
 
 ### 📄 Licencia
 

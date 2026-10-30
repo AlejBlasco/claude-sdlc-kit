@@ -10,12 +10,20 @@ load. Answers are scored against tests/activation/<agent>.json.
   python scripts/eval_activation.py --agent software-developer --backend cli
   python scripts/eval_activation.py --agent software-developer --backend api
   python scripts/eval_activation.py --catalog names    # file names only
+  python scripts/eval_activation.py --agent delegation # does the main assistant pick the right subagent?
+  python scripts/eval_activation.py --agent software-developer --write-baseline
+  python scripts/eval_activation.py --agent software-developer --strict
 
 --dry-run validates the case file and estimates the cost; it calls no model.
+--write-baseline records, per case, the share of clean runs in
+tests/activation/baseline.json. --strict exits 1 only if a case that held in
+that baseline (at least two thirds of its runs clean) no longer holds; misses
+already in the baseline do not fail it.
 Backends: `cli` runs `claude -p` with your Claude account; `api` calls the
 Messages API with ANTHROPIC_API_KEY. Standard library only.
 """
 import argparse
+import datetime
 import json
 import os
 import re
@@ -44,6 +52,9 @@ PRICES = {
 }
 
 FALLBACK_STEP = "Load any relevant skill files under `{dir}` using the Read tool."
+
+HOLD_RATE = 2 / 3  # a case holds when at least this share of its runs is clean
+BASELINE = ROOT / "tests/activation/baseline.json"
 
 
 def read(path):
@@ -88,6 +99,32 @@ def agent_step(agent, skills_dir):
         if folder in block and (not step or step not in block) and not block.lstrip().startswith("#"):
             parts.append(re.sub(r"\s+", " ", block).strip())
     return "\n\n".join(parts)
+
+
+DELEGATION = "delegation"  # pseudo-agent: the main assistant choosing a subagent, not a skill
+
+
+def agents_catalog():
+    """One entry per subagent: name, name and description, read from the agent file's frontmatter."""
+    entries = []
+    for path in sorted((ROOT / ".claude/agents").glob("*.md")):
+        match = re.match(r"---\n(.*?)\n---", read(path).replace("\r\n", "\n"), re.S)
+        fields = dict(re.findall(r"^([\w-]+):\s*(.*)$", match.group(1), re.M)) if match else {}
+        name = fields.get("name", path.stem)
+        entries.append((name, name, fields.get("description", "")))
+    return entries
+
+
+def delegation_prompt(entries):
+    listing = "\n".join(f"- {name}: {intro}" for name, _, intro in entries)
+    return (
+        "You are the main assistant of a software project that has these specialised subagents. "
+        "For each request you decide whether to delegate it to one or more of them, or to answer it "
+        "yourself. Delegate only when a subagent's description clearly fits the request.\n\n"
+        f"Subagents available (name: description):\n{listing}\n\n"
+        "Reply with ONLY a JSON array of the subagent names you would delegate to, for example "
+        "[\"name-a\"]; [] if you would answer yourself."
+    )
 
 
 def system_prompt(agent, step, entries, mode="full"):
@@ -156,13 +193,13 @@ def call_cli(model, system, task):
     return json.loads(out.stdout).get("result", "")
 
 
-def call_api(model, system, task):
+def call_api(model, system, task, max_tokens=300):
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
         raise RuntimeError("ANTHROPIC_API_KEY is not set")
     body = {
         "model": model,
-        "max_tokens": 300,
+        "max_tokens": max_tokens,
         "system": system,
         "messages": [{"role": "user", "content": task}],
     }
@@ -265,6 +302,53 @@ def report(results):
     return failing
 
 
+def clean_run(r):
+    """A run is clean when every expected skill was loaded and no forbidden one was."""
+    s = r["selected"]
+    if s is None or not set(r["expect"]) <= s or set(r["forbid"]) & s:
+        return False
+    return not r.get("expect_any") or bool(s & set(r["expect_any"]))
+
+
+def case_rates(results):
+    runs = defaultdict(list)
+    for r in results:
+        runs[r["id"]].append(clean_run(r))
+    return {cid: sum(v) / len(v) for cid, v in runs.items()}
+
+
+def write_baseline(path, key, rates, meta):
+    data = json.loads(read(path)) if path.is_file() else {}
+    data[key] = {**meta, "recorded": datetime.date.today().isoformat(),
+                 "cases": {cid: round(r, 3) for cid, r in sorted(rates.items())}}
+    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    print(f"\nBaseline for {key} written to {path.relative_to(ROOT)}")
+
+
+def regressions(path, key, rates):
+    """Cases that held in the recorded baseline and no longer do; None if there is no baseline."""
+    data = json.loads(read(path)) if path.is_file() else {}
+    base = data.get(key, {}).get("cases")
+    if base is None:
+        print(f"\nNo baseline recorded for {key} in {path.relative_to(ROOT)}; run with --write-baseline first.")
+        return None
+    lost = sorted(c for c, r in rates.items() if c in base and base[c] >= HOLD_RATE and r < HOLD_RATE)
+    gained = sorted(c for c, r in rates.items() if c in base and base[c] < HOLD_RATE and r >= HOLD_RATE)
+    new = sorted(c for c in rates if c not in base)
+    print(f"\nAgainst the baseline of {data[key].get('recorded', '?')}: "
+          f"{len(lost)} regression(s), {len(gained)} case(s) now holding, {len(new)} not in the baseline.")
+    for c in lost:
+        print(f"  REGRESSION {c}: {base[c]:.0%} of runs clean in the baseline, {rates[c]:.0%} now")
+    if lost:
+        print("  A drop of one or two runs is within run-to-run noise. Confirm by re-running only these "
+              "cases (" + " ".join(f"--case {c}" for c in lost) + ") before acting on it.")
+    for c in gained:
+        print(f"  improved   {c}: {base[c]:.0%} -> {rates[c]:.0%}")
+    for c in new:
+        print(f"  new        {c}: not in the baseline (run --write-baseline to record it)")
+    return lost
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--agent", default="software-developer")
@@ -274,13 +358,16 @@ def main():
     ap.add_argument("--case", action="append", help="only this case id (repeatable)")
     ap.add_argument("--catalog", choices=("full", "names"), default="full",
                     help="what the model sees per skill: title + opening paragraph, or file name only")
-    ap.add_argument("--strict", action="store_true", help="exit 1 if any skill misses the pass marks")
+    ap.add_argument("--strict", action="store_true",
+                    help="exit 1 if a case that held in the recorded baseline no longer does")
+    ap.add_argument("--write-baseline", action="store_true", help="record this run in tests/activation/baseline.json")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--out", help="write raw results as JSON to this file")
     args = ap.parse_args()
 
+    delegation = args.agent == DELEGATION
     skills_dir = ROOT / ".claude/skills" / args.agent
-    entries = catalog(skills_dir)
+    entries = agents_catalog() if delegation else catalog(skills_dir)
     cases, errors = load_cases(args.agent, entries)
     for e in errors:
         print(f"CASES {e}")
@@ -288,7 +375,10 @@ def main():
         return 1
     if args.case:
         cases = [c for c in cases if c["id"] in args.case]
-    system = system_prompt(args.agent, agent_step(args.agent, skills_dir), entries, args.catalog)
+    if delegation:
+        system = delegation_prompt(entries)
+    else:
+        system = system_prompt(args.agent, agent_step(args.agent, skills_dir), entries, args.catalog)
 
     if args.dry_run:
         print(f"Case file OK: {len(cases)} cases, {len(entries)} skills in the catalog.")
@@ -301,18 +391,29 @@ def main():
         for run in range(args.runs):
             answer = call(args.model, system, f"Task: {case['prompt']}")
             selected = parse_selection(answer)
+            if delegation and selected is not None:
+                selected = {s[:-3] if s.endswith(".md") else s for s in selected}
             results.append({
                 "id": case["id"], "run": run, "expect": case.get("expect", []),
                 "forbid": case.get("forbid", []), "allow": case.get("allow", []), "expect_any": case.get("expect_any", []), "selected": selected, "raw": answer,
             })
             print(f"{case['id']} run {run + 1}/{args.runs}: {sorted(selected) if selected is not None else 'UNPARSEABLE'}")
-    failing = report(results)
+    report(results)
     if args.out:
         Path(args.out).write_text(
             json.dumps([{**r, "selected": sorted(r["selected"]) if r["selected"] is not None else None} for r in results], indent=2),
             encoding="utf-8",
         )
-    return 1 if args.strict and failing else 0
+    rates = case_rates(results)
+    if args.write_baseline:
+        if args.case:
+            print("\n--write-baseline needs the full case set; drop --case.")
+            return 1
+        write_baseline(BASELINE, args.agent, rates, {"model": args.model, "runs": args.runs, "catalog": args.catalog})
+    if args.strict:
+        lost = regressions(BASELINE, args.agent, rates)
+        return 1 if lost is None or lost else 0
+    return 0
 
 
 if __name__ == "__main__":
