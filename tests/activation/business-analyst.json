@@ -1,0 +1,86 @@
+{
+  "agent": "business-analyst",
+  "allow": ["given-when-then-format.md", "requirements-elicitation.md"],
+  "note": "Prototype cases, written to be reviewed. kind: positive = must load the expected skills; negative = must not load the forbidden ones; confusable = a neighbouring skill looks applicable but is not. Skills not listed in expect, forbid or allow are reported as extras. given-when-then-format and requirements-elicitation are allowed everywhere: any requirements task writes acceptance criteria and may need elicitation.",
+  "cases": [
+    {
+      "id": "ba-001", "kind": "positive",
+      "prompt": "Here is a one-line ticket from the backlog: \"Improve search\". Write the requirements.",
+      "expect": ["requirements-elicitation.md"],
+      "forbid": ["commercial-product-definition.md"],
+      "allow": ["agile-requirements.md"]
+    },
+    {
+      "id": "ba-002", "kind": "positive",
+      "prompt": "A colleague said in chat: \"we need the thing to export stuff somehow\". Turn that into requirements.",
+      "expect": ["requirements-elicitation.md"],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-003", "kind": "positive",
+      "prompt": "Azure DevOps work item 1423: \"As a customer I want to reset my password\". Write the requirements for the sprint team.",
+      "expect": ["agile-requirements.md"],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-004", "kind": "positive",
+      "prompt": "Jira story PAY-88 goes into the next Scrum sprint. Split it if needed and write its acceptance criteria.",
+      "expect": ["agile-requirements.md", "given-when-then-format.md"],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-005", "kind": "positive",
+      "prompt": "We want to sell a reusable Blazor admin dashboard template to several clients. Define the product.",
+      "expect": ["commercial-product-definition.md"],
+      "forbid": []
+    },
+    {
+      "id": "ba-006", "kind": "confusable",
+      "prompt": "Add an export-to-CSV button to the internal reports page of our existing ERP. Write the requirements.",
+      "expect": [],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-007", "kind": "confusable",
+      "prompt": "Write the requirements for a new feature in our internal HR portal: employees request leave.",
+      "expect": [],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-008", "kind": "positive",
+      "prompt": "Review these acceptance criteria and rewrite them so they are testable: \"The system should be fast and user friendly\".",
+      "expect": ["given-when-then-format.md"],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-009", "kind": "positive",
+      "prompt": "Write the acceptance criteria for a login form that locks the account after five failed attempts.",
+      "expect": ["given-when-then-format.md"],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-010", "kind": "confusable",
+      "prompt": "A client emailed us a complete, detailed specification for two-factor authentication. Turn it into requirements; there is no backlog or sprint involved.",
+      "expect": [],
+      "forbid": ["agile-requirements.md", "commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-011", "kind": "positive",
+      "prompt": "El cliente dice que quiere \"algo para controlar mejor los pedidos\". Redacta los requisitos.",
+      "expect": ["requirements-elicitation.md"],
+      "forbid": ["commercial-product-definition.md"]
+    },
+    {
+      "id": "ba-012", "kind": "positive",
+      "prompt": "Quiero definir un paquete freelance que vendo a varias empresas: una plantilla de landing page con Blazor.",
+      "expect": ["commercial-product-definition.md"],
+      "forbid": []
+    },
+    {
+      "id": "ba-013", "kind": "negative",
+      "prompt": "Explain in two sentences the difference between a user story and a requirement.",
+      "expect": [],
+      "forbid": ["commercial-product-definition.md"]
+    }
+  ]
+}

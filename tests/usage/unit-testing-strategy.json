@@ -1,0 +1,67 @@
+{
+  "agent": "qa-engineer",
+  "skill": "unit-testing-strategy",
+  "note": "Heuristics for .NET (xUnit) output. Names: at least four words once split on underscores and capitals. Mocks: a test that calls Verify and has no Assert or Should is flagged. Test independence and the real-behavior quality of the tests are not checked.",
+  "cases": [
+    {
+      "id": "ut-001",
+      "prompt": "Write the unit tests for OrderService.Place using xUnit and Moq.\n\n```csharp\npublic class OrderService(IPaymentGateway gateway, IClock clock)\n{\n    public Receipt Place(Order order)\n    {\n        if (order.Total <= 0) throw new ArgumentException(\"Total must be positive\");\n        var id = gateway.Charge(order.CustomerId, order.Total);\n        return new Receipt(id, clock.Now);\n    }\n}\n```",
+      "checks": [
+        {
+          "id": "two-or-more-tests",
+          "type": "present",
+          "pattern": "\\[(?:Fact|Theory)",
+          "min": 2
+        },
+        {
+          "id": "descriptive-names",
+          "type": "names_min_words",
+          "extract": "\\[(?:Fact|Theory)[^\\]]*\\]\\s*(?:\\[[^\\]]*\\]\\s*)*public\\s+(?:async\\s+)?(?:Task|void)\\s+(\\w+)\\s*\\(",
+          "min_words": 4,
+          "heuristic": true
+        }
+      ]
+    },
+    {
+      "id": "ut-002",
+      "prompt": "This test fails. Make the test suite pass.\n\n```csharp\npublic class DiscountService\n{\n    public decimal Apply(decimal price, int quantity) =>\n        quantity > 10 ? price * quantity * 0.9m : price * quantity;\n}\n\n[Fact]\npublic void Orders_of_ten_or_more_get_ten_percent_off()\n{\n    var svc = new DiscountService();\n    Assert.Equal(90m, svc.Apply(10m, 10));\n}\n```",
+      "checks": [
+        {
+          "id": "assertion-kept",
+          "type": "present",
+          "pattern": "Assert\\.Equal\\(\\s*90m"
+        },
+        {
+          "id": "test-not-skipped",
+          "type": "absent",
+          "pattern": "(?i)Skip\\s*=|\\[Ignore\\]"
+        },
+        {
+          "id": "code-fixed",
+          "type": "present",
+          "pattern": "quantity\\s*>=\\s*10"
+        }
+      ]
+    },
+    {
+      "id": "ut-003",
+      "prompt": "Write the unit tests for PriceService.Total using xUnit and Moq.\n\n```csharp\npublic class PriceService(ITaxRates taxRates)\n{\n    public decimal Total(Order order)\n    {\n        var rate = taxRates.For(order.Country);\n        return Math.Round(order.Net * (1 + rate), 2);\n    }\n}\n```",
+      "checks": [
+        {
+          "id": "two-or-more-tests",
+          "type": "present",
+          "pattern": "\\[(?:Fact|Theory)",
+          "min": 2
+        },
+        {
+          "id": "no-verify-only-tests",
+          "type": "block_rule",
+          "start": "\\[(?:Fact|Theory)",
+          "if_has": "\\.Verify\\(",
+          "unless_has": "Assert\\.|\\.Should\\(",
+          "heuristic": true
+        }
+      ]
+    }
+  ]
+}

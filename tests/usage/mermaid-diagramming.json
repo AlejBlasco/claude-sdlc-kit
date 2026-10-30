@@ -1,0 +1,72 @@
+{
+  "agent": "technical-writer",
+  "skill": "mermaid-diagramming",
+  "note": "Only the shape is checked: tagged fence, diagram type, label length. These checks cannot tell whether the diagram renders or is accurate (there is no Mermaid renderer in this repo).",
+  "cases": [
+    {
+      "id": "mer-001",
+      "prompt": "Document how the checkout service calls the payment service and the inventory service when an order is placed. Include a diagram.",
+      "checks": [
+        {
+          "id": "tagged-mermaid-block",
+          "type": "present",
+          "pattern": "```mermaid"
+        },
+        {
+          "id": "no-untagged-diagram-fence",
+          "type": "absent",
+          "pattern": "```[ \\t]*\\n\\s*(flowchart|graph|sequenceDiagram|erDiagram|stateDiagram|classDiagram)"
+        },
+        {
+          "id": "sequence-diagram",
+          "type": "mermaid_type",
+          "allowed": [
+            "sequenceDiagram"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mer-002",
+      "prompt": "Document the data model for orders: customers, orders and order lines, and how they relate. Include a diagram.",
+      "checks": [
+        {
+          "id": "tagged-mermaid-block",
+          "type": "present",
+          "pattern": "```mermaid"
+        },
+        {
+          "id": "er-diagram",
+          "type": "mermaid_type",
+          "allowed": [
+            "erDiagram"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mer-003",
+      "prompt": "Document the order approval process: the requester submits, the system validates, a manager reviews, the order is approved or rejected, the requester is notified and the order is archived. Include a diagram.",
+      "checks": [
+        {
+          "id": "tagged-mermaid-block",
+          "type": "present",
+          "pattern": "```mermaid"
+        },
+        {
+          "id": "flowchart",
+          "type": "mermaid_type",
+          "allowed": [
+            "flowchart"
+          ]
+        },
+        {
+          "id": "labels-up-to-40-chars",
+          "type": "mermaid_labels",
+          "max": 40,
+          "heuristic": true
+        }
+      ]
+    }
+  ]
+}

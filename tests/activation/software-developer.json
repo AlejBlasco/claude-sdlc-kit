@@ -1,0 +1,269 @@
+{
+  "agent": "software-developer",
+  "allow": ["coding-standards.md"],
+  "allow_by_tag": {"csharp": ["microsoft-naming-conventions.md", "dotnet10-conventions.md"], "ui": ["frontend-production-quality.md"]},
+  "note": "Prototype cases. kind: positive = must load the expected skills; negative = must not load the forbidden ones; confusable = a neighbouring skill looks applicable but is not. Skills not listed in expect, forbid or allow are reported as extras. The top-level allow list and allow_by_tag (per case tags) are added to each case's allow list.",
+  "cases": [
+    {
+      "id": "sd-001", "kind": "positive", "tags": ["csharp", "ui"],
+      "prompt": "Add a new Blazor component that shows a paginated list of invoices with a delete button.",
+      "expect": ["blazor-components.md", "coding-standards.md"],
+      "forbid": ["docker-dotnet.md", "cqrs-mediator-implementation.md"]
+    },
+    {
+      "id": "sd-002", "kind": "positive", "tags": ["csharp"],
+      "prompt": "Add a repository method that loads orders with their lines and customer, avoiding N+1 queries, using Entity Framework Core.",
+      "expect": ["ef-core-patterns.md", "coding-standards.md"],
+      "forbid": ["blazor-ui-system.md", "motion-design.md"]
+    },
+    {
+      "id": "sd-003", "kind": "positive", "tags": ["csharp"],
+      "prompt": "The project already uses MediatR. Implement the CreateOrder command and its handler, with validation.",
+      "expect": ["cqrs-mediator-implementation.md"],
+      "forbid": ["docker-dotnet.md", "tailwind-css-conventions.md"]
+    },
+    {
+      "id": "sd-004", "kind": "confusable", "tags": ["csharp"],
+      "prompt": "Add a simple GET endpoint that returns the list of products from the DbContext. The project does not use MediatR or CQRS.",
+      "expect": ["ef-core-patterns.md"],
+      "forbid": ["cqrs-mediator-implementation.md"]
+    },
+    {
+      "id": "sd-005", "kind": "positive", "tags": [],
+      "prompt": "Write a Dockerfile and a docker-compose file for this ASP.NET Core API.",
+      "expect": ["docker-dotnet.md"],
+      "forbid": ["blazor-components.md", "ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-006", "kind": "negative", "tags": ["csharp"],
+      "prompt": "Fix the NullReferenceException that OrderService.Calculate throws when the order has no lines.",
+      "expect": ["coding-standards.md"],
+      "forbid": ["docker-dotnet.md", "motion-design.md", "tailwind-css-conventions.md", "premium-design-constitution.md", "style-direction.md", "redesign-protocol.md"]
+    },
+    {
+      "id": "sd-007", "kind": "positive", "tags": ["ui"],
+      "prompt": "Style this Razor page's card grid with the project's Tailwind setup.",
+      "expect": ["tailwind-css-conventions.md"],
+      "forbid": ["docker-dotnet.md", "ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-008", "kind": "confusable", "tags": ["ui"],
+      "prompt": "The project styles everything with CSS Modules. Add a styled pricing table to the pricing page.",
+      "expect": [],
+      "forbid": ["tailwind-css-conventions.md"]
+    },
+    {
+      "id": "sd-009", "kind": "positive", "tags": ["ui"],
+      "prompt": "Add a subtle fade and slide transition when the modal opens.",
+      "expect": [],
+      "expect_any": ["motion-design.md", "emil-kowalski-motion-craft.md"],
+      "forbid": ["redesign-protocol.md", "docker-dotnet.md"]
+    },
+    {
+      "id": "sd-010", "kind": "positive", "tags": ["ui"],
+      "prompt": "Make the button press feel polished: spring easing, a press scale and sensible durations.",
+      "expect": ["emil-kowalski-motion-craft.md"],
+      "allow": ["motion-design.md"],
+      "forbid": ["ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-011", "kind": "negative", "tags": ["ui"],
+      "prompt": "Implement the validation messages for the signup form.",
+      "expect": ["coding-standards.md"],
+      "forbid": ["motion-design.md", "emil-kowalski-motion-craft.md", "docker-dotnet.md"]
+    },
+    {
+      "id": "sd-012", "kind": "positive", "tags": ["ui"],
+      "prompt": "Make the dashboard layout work on phones and tablets.",
+      "expect": ["responsive-engineering.md"],
+      "forbid": ["docker-dotnet.md", "ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-013", "kind": "positive", "tags": ["ui"],
+      "prompt": "Build a landing page for our new product. There is no mockup and no brand guide yet.",
+      "expect": ["style-direction.md", "premium-design-constitution.md"],
+      "forbid": ["redesign-protocol.md"]
+    },
+    {
+      "id": "sd-014", "kind": "confusable", "tags": ["ui"],
+      "prompt": "Implement this page exactly as in the approved Figma mockup, using our existing design system.",
+      "expect": [],
+      "forbid": ["style-direction.md"]
+    },
+    {
+      "id": "sd-015", "kind": "positive", "tags": ["ui"],
+      "prompt": "Modernize and restyle our existing admin dashboard; it looks dated.",
+      "expect": ["redesign-protocol.md"],
+      "forbid": ["style-direction.md"]
+    },
+    {
+      "id": "sd-016", "kind": "confusable", "tags": ["ui"],
+      "prompt": "Create a brand-new marketing landing page from scratch.",
+      "expect": [],
+      "forbid": ["redesign-protocol.md"]
+    },
+    {
+      "id": "sd-017", "kind": "positive", "tags": ["ui"],
+      "prompt": "Define the color, spacing and typography tokens we will reuse across the whole app.",
+      "expect": ["design-system-tokens.md"],
+      "forbid": ["docker-dotnet.md", "ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-018", "kind": "positive", "tags": ["csharp", "ui"],
+      "prompt": "We are building ten related Blazor components that must share one look: buttons, inputs, cards, dialogs.",
+      "expect": ["blazor-ui-system.md", "blazor-components.md"],
+      "forbid": ["docker-dotnet.md"]
+    },
+    {
+      "id": "sd-019", "kind": "confusable", "tags": ["csharp", "ui"],
+      "prompt": "Add one isolated Blazor badge component that shows a status label.",
+      "expect": ["blazor-components.md"],
+      "forbid": ["blazor-ui-system.md"]
+    },
+    {
+      "id": "sd-020", "kind": "positive", "tags": ["ui"],
+      "prompt": "Generate the hero section for the public marketing site and avoid the generic AI-generated look.",
+      "expect": ["anti-slop-frontend-checklist.md", "premium-design-constitution.md"],
+      "forbid": ["docker-dotnet.md"]
+    },
+    {
+      "id": "sd-021", "kind": "negative", "tags": ["ui"],
+      "prompt": "Build a data table for the internal admin tool used by our staff. It needs no design ambition.",
+      "expect": [],
+      "forbid": ["premium-design-constitution.md", "style-direction.md"]
+    },
+    {
+      "id": "sd-022", "kind": "positive", "tags": ["ui"],
+      "prompt": "Implement the checkout screen from the approved design and make it production ready.",
+      "expect": ["frontend-production-quality.md"],
+      "forbid": ["docker-dotnet.md", "ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-023", "kind": "positive", "tags": ["ui"],
+      "prompt": "Is the pricing page meant to persuade visitors or to help operators work? Decide the design approach before building it.",
+      "expect": ["design-modes.md"],
+      "forbid": ["docker-dotnet.md"]
+    },
+    {
+      "id": "sd-024", "kind": "positive", "tags": ["csharp"],
+      "prompt": "Review this service class that does validation, persistence and email sending, and refactor it.",
+      "expect": ["solid-principles.md"],
+      "forbid": ["motion-design.md", "tailwind-css-conventions.md"]
+    },
+    {
+      "id": "sd-025", "kind": "positive", "tags": ["csharp"],
+      "prompt": "Write a C# class that computes invoice totals.",
+      "expect": ["microsoft-naming-conventions.md", "dotnet10-conventions.md", "coding-standards.md"],
+      "forbid": ["motion-design.md", "docker-dotnet.md"]
+    },
+    {
+      "id": "sd-026", "kind": "negative", "tags": ["ui"],
+      "prompt": "Update the CSS variables for the dark theme.",
+      "expect": [],
+      "forbid": ["microsoft-naming-conventions.md", "dotnet10-conventions.md", "ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-027", "kind": "positive", "tags": ["csharp"],
+      "prompt": "Change the authentication middleware and migrate the users table to add a password-reset column.",
+      "expect": ["safe-implementation-workflow.md"],
+      "forbid": ["motion-design.md"]
+    },
+    {
+      "id": "sd-028", "kind": "negative", "tags": ["csharp"],
+      "prompt": "Fix a typo in a single code comment in Program.cs.",
+      "expect": [],
+      "forbid": ["safe-implementation-workflow.md", "docker-dotnet.md", "motion-design.md"]
+    },
+    {
+      "id": "sd-029", "kind": "confusable", "tags": [],
+      "prompt": "Add a small helper function to the Python build script that renames output files.",
+      "expect": ["coding-standards.md"],
+      "forbid": ["microsoft-naming-conventions.md", "dotnet10-conventions.md"]
+    },
+    {
+      "id": "sd-030", "kind": "positive", "tags": ["csharp"],
+      "prompt": "Upgrade this class to the newest C# features available on .NET 10, such as primary constructors and collection expressions.",
+      "expect": ["dotnet10-conventions.md"],
+      "forbid": ["motion-design.md", "tailwind-css-conventions.md"]
+    },
+    {
+      "id": "sd-031", "kind": "positive", "tags": ["csharp", "ui"],
+      "prompt": "Añade un componente Blazor con un formulario de contacto y su validación.",
+      "expect": ["blazor-components.md", "coding-standards.md"],
+      "forbid": ["docker-dotnet.md"]
+    },
+    {
+      "id": "sd-032", "kind": "positive", "tags": [],
+      "prompt": "Necesito que el Dockerfile de la API de .NET use un build multi-stage.",
+      "expect": ["docker-dotnet.md"],
+      "forbid": ["blazor-components.md", "motion-design.md"]
+    },
+    {
+      "id": "sd-033", "kind": "positive", "tags": ["ui"],
+      "prompt": "Haz que la animación de apertura del menú lateral sea más fluida.",
+      "expect": ["emil-kowalski-motion-craft.md"],
+      "allow": ["motion-design.md"],
+      "forbid": ["docker-dotnet.md", "ef-core-patterns.md"]
+    },
+    {
+      "id": "sd-034", "kind": "negative", "tags": ["csharp"],
+      "prompt": "Write unit tests for the pricing calculator.",
+      "expect": [],
+      "forbid": ["motion-design.md", "responsive-engineering.md", "premium-design-constitution.md", "docker-dotnet.md"]
+    },
+    {
+      "id": "sd-035", "kind": "confusable", "tags": ["csharp", "ui"],
+      "prompt": "Add a single tooltip component to the existing Blazor app.",
+      "expect": ["blazor-components.md"],
+      "forbid": ["blazor-ui-system.md"]
+    },
+    {
+      "id": "sd-036", "kind": "confusable", "tags": ["csharp", "ui"],
+      "prompt": "Fix the alignment of the icon inside the existing Delete button component.",
+      "expect": [],
+      "forbid": ["blazor-ui-system.md"]
+    },
+    {
+      "id": "sd-037", "kind": "confusable", "tags": ["csharp", "ui"],
+      "prompt": "Create a Blazor component that shows the user avatar with a fallback initial.",
+      "expect": ["blazor-components.md"],
+      "forbid": ["blazor-ui-system.md"]
+    },
+    {
+      "id": "sd-038", "kind": "confusable", "tags": ["csharp"],
+      "prompt": "This small CRUD app has no mediator layer. Add an endpoint to update a customer email address.",
+      "expect": [],
+      "forbid": ["cqrs-mediator-implementation.md"]
+    },
+    {
+      "id": "sd-039", "kind": "confusable", "tags": ["csharp"],
+      "prompt": "Add a service method that sends a welcome email after signup, called directly from the controller.",
+      "expect": [],
+      "forbid": ["cqrs-mediator-implementation.md"]
+    },
+    {
+      "id": "sd-040", "kind": "confusable", "tags": ["csharp"],
+      "prompt": "Añade un endpoint para consultar el estado de un pedido; la aplicación llama a los servicios directamente, sin MediatR.",
+      "expect": [],
+      "forbid": ["cqrs-mediator-implementation.md"]
+    },
+    {
+      "id": "sd-041", "kind": "confusable", "tags": ["ui"],
+      "prompt": "The project uses Bootstrap 5. Add a responsive navbar to the layout.",
+      "expect": [],
+      "forbid": ["tailwind-css-conventions.md"]
+    },
+    {
+      "id": "sd-042", "kind": "confusable", "tags": ["ui"],
+      "prompt": "Our design system ships a themed component library with its own theming. Restyle the data grid using its theme tokens.",
+      "expect": [],
+      "forbid": ["tailwind-css-conventions.md"]
+    },
+    {
+      "id": "sd-043", "kind": "confusable", "tags": ["ui"],
+      "prompt": "Add a dark mode toggle using plain CSS custom properties; the project uses Sass.",
+      "expect": [],
+      "forbid": ["tailwind-css-conventions.md"]
+    }
+  ]
+}

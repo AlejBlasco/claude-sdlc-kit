@@ -4,11 +4,16 @@
 Run from anywhere:  python scripts/check_kit.py
 Exits 1 if any check fails; prints one line per problem.
 
-Checks:
+Level 1 (static) checks:
   1. Frontmatter of every agent and command.
-  2. Every `.claude/...` path mentioned in agents/commands exists.
-  3. The install trees in the README (EN and ES) match the real files.
-  4. The README version badge matches the latest CHANGELOG entry.
+  2. Every `.claude/...` path mentioned in agents, commands and skills exists.
+  3. Skill structure: folder matches an agent (kit-only folders listed in
+     REPO_ONLY excepted), `# Skill:` title and a "Load this skill" line near
+     the top, and sibling-skill references resolve.
+  4. Relative markdown links in every .md file resolve.
+  5. Third-party skills (`Source:` header) and THIRD_PARTY_NOTICES.md agree.
+  6. The install trees in the README (EN and ES) match the real files.
+  7. The README version badge matches the latest CHANGELOG entry.
 
 Standard library only.
 """
@@ -28,18 +33,25 @@ REPO_ONLY = (
     ".github/ISSUE_TEMPLATE/config.yml",
     ".github/pull_request_template.md",
     ".github/workflows/",
+    ".claude/skills/kit-validation/",  # maintainer-only skill; it runs scripts/ and tests/, which users do not get
 )
 
 TREE_ROOTS = ("your-repo/", "tu-repo/")
+
+# Files that skills mention by bare name but that live in the user's own repo,
+# not in this one.
+USER_REPO_FILES = ("CLAUDE.md", "STYLE.md")
 
 
 def read(path):
     return Path(path).read_text(encoding="utf-8")
 
 
-def tracked_files():
+def repo_files():
+    """Tracked files plus new, not-ignored ones, so local runs see work in progress."""
     out = subprocess.run(
-        ["git", "ls-files"], cwd=ROOT, capture_output=True, text=True, check=True
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
+        cwd=ROOT, capture_output=True, text=True, check=True,
     ).stdout
     return [line for line in out.splitlines() if line]
 
@@ -76,8 +88,8 @@ def check_frontmatter(errors):
 
 def check_references(errors):
     pattern = re.compile(r"\.claude/[A-Za-z0-9_./<>*-]*")
-    for folder in (".claude/agents", ".claude/commands"):
-        for path in sorted((ROOT / folder).glob("*.md")):
+    for folder in (".claude/agents", ".claude/commands", ".claude/skills"):
+        for path in sorted((ROOT / folder).rglob("*.md")):
             rel = path.relative_to(ROOT).as_posix()
             for ref in sorted(set(pattern.findall(read(path)))):
                 ref = ref.rstrip(".")
@@ -85,6 +97,77 @@ def check_references(errors):
                     continue  # placeholder such as .claude/skills/<agent>/
                 if not (ROOT / ref).exists():
                     errors.append(f"{rel}: references '{ref}', which does not exist")
+
+
+def skill_files():
+    """Skill files proper: every .md under .claude/skills except folder READMEs."""
+    return sorted(
+        p for p in (ROOT / ".claude/skills").rglob("*.md") if p.name != "README.md"
+    )
+
+
+def check_skills(errors):
+    skills_dir = ROOT / ".claude/skills"
+    for folder in sorted(p for p in skills_dir.iterdir() if p.is_dir()):
+        if f".claude/skills/{folder.name}/" in REPO_ONLY:
+            continue  # kit-only skill folder: no agent owns it
+        if not (ROOT / ".claude/agents" / f"{folder.name}.md").exists():
+            errors.append(
+                f".claude/skills/{folder.name}/: no agent .claude/agents/{folder.name}.md"
+            )
+    for path in skill_files():
+        rel = path.relative_to(ROOT).as_posix()
+        lines = read(path).splitlines()
+        title = lines[0] if lines else ""
+        if not title.startswith("# Skill:"):
+            errors.append(f"{rel}: first line must start with '# Skill:'")
+        reserved = "(reserved" in title
+        if not reserved and not any("Load this skill" in l for l in lines[:20]):
+            errors.append(f"{rel}: no 'Load this skill' line in the first 20 lines")
+
+
+def check_skill_refs(errors):
+    """Backticked `*.md` names in a skill must point to an existing file."""
+    pattern = re.compile(r"`([^`\s]+\.md)`")
+    for path in skill_files():
+        rel = path.relative_to(ROOT).as_posix()
+        for ref in sorted(set(pattern.findall(read(path)))):
+            if any(c in ref for c in "<>*") or ref.startswith(("http", ".claude/")):
+                continue  # placeholders; .claude/ paths are covered by check_references
+            if ref in USER_REPO_FILES:
+                continue
+            bases = (path.parent, ROOT / ".claude/skills", ROOT, ROOT / ".github/ISSUE_TEMPLATE")
+            if not any((b / ref).exists() for b in bases):
+                errors.append(f"{rel}: references '{ref}', which does not exist")
+
+
+def check_links(errors):
+    link = re.compile(r"\]\(([^)\s]+)\)")
+    fence = re.compile(r"```.*?```", re.S)
+    for rel in repo_files():
+        if not rel.endswith(".md"):
+            continue
+        base = (ROOT / rel).parent
+        for target in sorted(set(link.findall(fence.sub("", read(ROOT / rel))))):
+            if target.startswith(("http://", "https://", "mailto:", "#")):
+                continue
+            if not (base / target.split("#")[0]).exists():
+                errors.append(f"{rel}: link to '{target}', which does not exist")
+
+
+def check_third_party(errors):
+    notices = read(ROOT / "THIRD_PARTY_NOTICES.md")
+    listed = set(re.findall(r"^\| `(\.claude/skills/[^`]+)`", notices, re.M))
+    for rel in sorted(listed):
+        if not (ROOT / rel).exists():
+            errors.append(f"THIRD_PARTY_NOTICES.md: lists '{rel}', which does not exist")
+    for path in skill_files():
+        rel = path.relative_to(ROOT).as_posix()
+        has_source = any(l.startswith("Source:") for l in read(path).splitlines()[:15])
+        if has_source and rel not in listed:
+            errors.append(f"{rel}: has a 'Source:' header but is not in THIRD_PARTY_NOTICES.md")
+        if rel in listed and not has_source:
+            errors.append(f"{rel}: is in THIRD_PARTY_NOTICES.md but has no 'Source:' header")
 
 
 def parse_tree(block):
@@ -119,7 +202,7 @@ def tree_blocks(readme):
 def check_readme_tree(errors):
     actual = {
         f
-        for f in tracked_files()
+        for f in repo_files()
         if f.startswith((".claude/", ".github/")) and not f.startswith(REPO_ONLY)
     }
     blocks = list(tree_blocks(read(ROOT / "README.md")))
@@ -155,7 +238,16 @@ def check_version(errors):
 
 def main():
     errors = []
-    for check in (check_frontmatter, check_references, check_readme_tree, check_version):
+    for check in (
+        check_frontmatter,
+        check_references,
+        check_skills,
+        check_skill_refs,
+        check_links,
+        check_third_party,
+        check_readme_tree,
+        check_version,
+    ):
         check(errors)
     for e in errors:
         print(f"FAIL {e}")

@@ -13,7 +13,7 @@ Thanks for helping improve the kit. Usage is covered in the [README](README.md);
 - Add an entry to [CHANGELOG.md](CHANGELOG.md) and keep the README version badge in sync with it.
 - Make README changes in **both English and Spanish**.
 - **Hard invariant:** no agent, command or skill may run `git commit` or `git push`, or anything equivalent. Never add instructions that do.
-- Run `python scripts/check_kit.py` before opening the PR (needs only Python 3 and git). The same script runs in CI; it checks frontmatter, `.claude/` references, the README install trees and the version badge against the CHANGELOG. If you add or remove a file under `.claude/` or `.github/`, update both README trees.
+- Run `python scripts/check_kit.py` before opening the PR (needs only Python 3 and git). The same script runs in CI; it checks agent/command frontmatter, `.claude/` references, skill structure (`# Skill:` title, a "Load this skill" line, sibling-skill references), relative markdown links, `Source:` headers against [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), the README install trees and the version badge against the CHANGELOG. If you add or remove a file under `.claude/` or `.github/`, update both README trees.
 - Open a pull request; the PR template has the checklist.
 
 ## Releasing

@@ -1,0 +1,81 @@
+{
+  "agent": "technical-writer",
+  "note": "Prototype cases, written to be reviewed. kind: positive = must load the expected skills; negative = must not load the forbidden ones; confusable = a neighbouring skill looks applicable but is not. Skills not listed in expect, forbid or allow are reported as extras.",
+  "cases": [
+    {
+      "id": "tw-001", "kind": "positive",
+      "prompt": "Write the technical documentation of the new ordering module for the engineering team.",
+      "expect": ["technical-documentation.md"],
+      "forbid": ["docs-as-product.md"],
+      "allow": ["mermaid-diagramming.md"]
+    },
+    {
+      "id": "tw-002", "kind": "positive",
+      "prompt": "Write the functional documentation of the new refund feature for the business stakeholders.",
+      "expect": ["functional-documentation.md"],
+      "forbid": ["docs-as-product.md"],
+      "allow": ["mermaid-diagramming.md"]
+    },
+    {
+      "id": "tw-003", "kind": "positive",
+      "prompt": "Add a sequence diagram showing how checkout calls the payment and inventory services.",
+      "expect": ["mermaid-diagramming.md"],
+      "forbid": ["docs-as-product.md"],
+      "allow": ["technical-documentation.md"]
+    },
+    {
+      "id": "tw-004", "kind": "positive",
+      "prompt": "We sell a Blazor admin template to clients. Write the documentation that ships with it.",
+      "expect": ["docs-as-product.md"],
+      "forbid": [],
+      "allow": ["technical-documentation.md"]
+    },
+    {
+      "id": "tw-005", "kind": "confusable",
+      "prompt": "Document the internal change to our invoice calculation for the finance team.",
+      "expect": ["functional-documentation.md"],
+      "forbid": ["docs-as-product.md"],
+      "allow": ["mermaid-diagramming.md"]
+    },
+    {
+      "id": "tw-006", "kind": "positive",
+      "prompt": "Document the new notifications feature: one document for engineers and one for the product owner, including a flowchart.",
+      "expect": ["technical-documentation.md", "functional-documentation.md", "mermaid-diagramming.md"],
+      "forbid": ["docs-as-product.md"]
+    },
+    {
+      "id": "tw-007", "kind": "positive",
+      "prompt": "Documenta técnicamente el módulo de facturación e incluye un diagrama de arquitectura.",
+      "expect": ["technical-documentation.md", "mermaid-diagramming.md"],
+      "forbid": ["docs-as-product.md"]
+    },
+    {
+      "id": "tw-008", "kind": "positive",
+      "prompt": "Escribe la documentación funcional del cambio en el flujo de aprobación para el equipo de negocio.",
+      "expect": ["functional-documentation.md"],
+      "forbid": ["docs-as-product.md"],
+      "allow": ["mermaid-diagramming.md"]
+    },
+    {
+      "id": "tw-009", "kind": "negative",
+      "prompt": "Fix the typo \"recieve\" in the README.",
+      "expect": [],
+      "forbid": ["docs-as-product.md"],
+      "allow": ["technical-documentation.md", "mermaid-diagramming.md", "functional-documentation.md"]
+    },
+    {
+      "id": "tw-010", "kind": "confusable",
+      "prompt": "Write a short paragraph explaining our retry policy. No diagrams are needed.",
+      "expect": [],
+      "forbid": ["mermaid-diagramming.md", "docs-as-product.md"],
+      "allow": ["technical-documentation.md"]
+    },
+    {
+      "id": "tw-011", "kind": "confusable",
+      "prompt": "Write the technical documentation for the internal module that exports data to the data warehouse.",
+      "expect": ["technical-documentation.md"],
+      "forbid": ["docs-as-product.md"],
+      "allow": ["mermaid-diagramming.md"]
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "agent": "software-architect",
+  "note": "Prototype cases, written to be reviewed. kind: positive = must load the expected skills; negative = must not load the forbidden ones; confusable = a neighbouring skill looks applicable but is not. Skills not listed in expect, forbid or allow are reported as extras. architecture-patterns and adr-writing are allowed everywhere: any design task may use a pattern reference or record a decision.",
+  "allow": ["architecture-patterns.md", "adr-writing.md"],
+  "cases": [
+    {
+      "id": "arch-001", "kind": "positive",
+      "prompt": "We must choose between PostgreSQL and SQL Server for the new product. Document the decision.",
+      "expect": ["adr-writing.md"],
+      "forbid": ["blazor-production-architecture.md"]
+    },
+    {
+      "id": "arch-002", "kind": "positive",
+      "prompt": "Design the breaking change to our public API versioning and record why we chose URL versioning.",
+      "expect": ["adr-writing.md"],
+      "forbid": ["blazor-production-architecture.md"]
+    },
+    {
+      "id": "arch-003", "kind": "positive",
+      "prompt": "Decide how to structure the new notifications feature: layered, modular monolith or microservices?",
+      "expect": ["architecture-patterns.md"],
+      "forbid": ["blazor-production-architecture.md"]
+    },
+    {
+      "id": "arch-004", "kind": "positive",
+      "prompt": "Design the overall architecture of our new Blazor app: render mode, layering and state management.",
+      "expect": ["blazor-production-architecture.md"],
+      "forbid": [],
+      "allow": ["dotnet-solution-structure.md"]
+    },
+    {
+      "id": "arch-005", "kind": "confusable",
+      "prompt": "Decide whether this one Blazor component should be split into two smaller components.",
+      "expect": [],
+      "forbid": ["blazor-production-architecture.md"]
+    },
+    {
+      "id": "arch-006", "kind": "positive",
+      "prompt": "Should we introduce CQRS and MediatR in our .NET solution?",
+      "expect": ["cqrs-mediator-pattern.md"],
+      "forbid": []
+    },
+    {
+      "id": "arch-007", "kind": "negative",
+      "prompt": "Design the deployment of a static documentation site on GitHub Pages.",
+      "expect": [],
+      "forbid": ["cqrs-mediator-pattern.md", "dotnet-azure-architecture.md", "dotnet-solution-structure.md", "blazor-production-architecture.md"]
+    },
+    {
+      "id": "arch-008", "kind": "positive",
+      "prompt": "Design the hosting and data storage for a .NET web API on Azure: compute, database and messaging.",
+      "expect": ["dotnet-azure-architecture.md"],
+      "forbid": []
+    },
+    {
+      "id": "arch-009", "kind": "positive",
+      "prompt": "We are scaffolding a new .NET solution from scratch. Decide the projects and where the code lives.",
+      "expect": ["dotnet-solution-structure.md"],
+      "forbid": []
+    },
+    {
+      "id": "arch-010", "kind": "confusable",
+      "prompt": "Design the architecture of a Python data pipeline that runs on AWS.",
+      "expect": [],
+      "forbid": ["dotnet-azure-architecture.md", "dotnet-solution-structure.md", "blazor-production-architecture.md", "cqrs-mediator-pattern.md"]
+    },
+    {
+      "id": "arch-011", "kind": "positive",
+      "prompt": "Necesito diseñar la arquitectura de una aplicación Blazor Server nueva y elegir el modo de renderizado.",
+      "expect": ["blazor-production-architecture.md"],
+      "forbid": []
+    },
+    {
+      "id": "arch-012", "kind": "positive",
+      "prompt": "Hemos decidido pasar de monolito a microservicios; deja esa decisión documentada.",
+      "expect": ["adr-writing.md"],
+      "forbid": []
+    },
+    {
+      "id": "arch-013", "kind": "negative",
+      "prompt": "Rename the \"orders\" section in the design document to \"sales\".",
+      "expect": [],
+      "forbid": ["adr-writing.md", "architecture-patterns.md", "cqrs-mediator-pattern.md", "dotnet-azure-architecture.md", "blazor-production-architecture.md"]
+    }
+  ]
+}

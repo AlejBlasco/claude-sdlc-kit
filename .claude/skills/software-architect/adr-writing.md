@@ -18,5 +18,8 @@ create a separate file unless asked)
 - **Consequences**: what becomes easier, what becomes harder, what new
   risks are introduced.
 
-Keep it short — 3-6 sentences total per decision. The goal is a future
-reader understanding *why*, not a full essay.
+Keep it short — 3-6 sentences total per decision, split as: **Context**
+up to 2, **Decision** exactly 1, **Consequences** up to 3 (cover easier,
+harder and risks in those sentences; a bullet counts as a sentence). Put
+option comparisons, assumptions and status notes outside the record. The
+goal is a future reader understanding *why*, not a full essay.

@@ -3,6 +3,58 @@
 All notable changes to this kit are documented in this file. Format
 loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.9] - 2026-10-30
+
+### Added
+
+- `scripts/check_kit.py` (level 1, static validation) now also checks skills:
+  folder matches an agent, `# Skill:` title, a "Load this skill" line near
+  the top, references between skills, relative markdown links in every
+  `.md` file, and that skills with a `Source:` header match
+  `THIRD_PARTY_NOTICES.md`.
+- **`scripts/eval_activation.py` and `tests/activation/`** (level 2,
+  activation): simulates an agent's skill-selection step and scores the
+  skills it would load against expected, forbidden and tolerated ones, with
+  recall and false positives per skill. Cases for the five agents with
+  skills, plus `--agent delegation`, which checks that the main assistant
+  picks the right subagent from the agents' names and descriptions.
+  `--backend cli` uses your Claude account, `--backend api` the Messages API;
+  standard library only.
+- **`scripts/eval_usage.py` and `tests/usage/`** (level 3, usage): runs each
+  task with and without a skill and applies deterministic checks (regular
+  expressions and structure rules, no judge model) to the replies. Starts
+  with `given-when-then-format`, `adr-writing`, `mermaid-diagramming` and
+  `unit-testing-strategy`.
+- **Baselines**: `tests/activation/BASELINE.md`, `tests/usage/BASELINE.md`
+  and a `baseline.json` next to each. `--write-baseline` records a run and
+  `--strict` exits 1 only when a case that held in the baseline no longer
+  does.
+- **`.claude/skills/kit-validation/validating-the-kit.md`**: the maintainer's
+  skill for the three validation levels (what each checks, how to run it,
+  which to run for each kind of change, how to read the results). Invoked by
+  the maintainer, not by an agent, and not copied to users' repositories.
+- `README.md` (English and Spanish) — new "Validating the kit" section
+  documenting the three levels, how to run them, the baselines and the
+  maintainer skill.
+
+### Changed
+
+- `scripts/check_kit.py` skips the "folder matches an agent" rule for
+  folders listed in `REPO_ONLY`, which now holds `.claude/skills/kit-validation/`.
+- `adr-writing.md`: the closing paragraph now gives a limit per section
+  (Context up to 2 sentences, Decision 1, Consequences up to 3) instead of
+  3 to 6 sentences in total. The level 3 cases showed the old wording was not
+  followed.
+- `dotnet-azure-architecture.md`: the opening paragraph now limits the skill
+  to choosing Azure services for a .NET solution, and says not to load it
+  for other clouds or hosts. The level 2 cases showed it loading for
+  unrelated deployment tasks.
+
+### Fixed
+
+- `custom-server-docker-portainer-cicd.md` cited
+  `dotnet-solution-structure.md` without its `software-architect/` folder.
+
 ## [2.8] - 2026-10-29
 
 ### Added

@@ -1,7 +1,9 @@
 # Skill: .NET 10 + Azure Architecture Choices
 
-Load this skill when designing a solution that targets Microsoft's
-ecosystem (.NET, Azure).
+Load this skill when choosing Azure services for a .NET solution:
+compute, database, messaging, identity and hosting. Do not load it for
+other clouds or hosts (AWS, GitHub Pages, on-premises), nor for deciding
+patterns or code structure inside the solution.
 
 ## Compute — pick based on workload shape
 

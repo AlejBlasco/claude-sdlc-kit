@@ -1,0 +1,104 @@
+{
+  "agent": "delegation",
+  "note": "Does the main assistant delegate to the right subagent? The model sees only each agent's name and description, as a stand-in for the agent list Claude Code shows. kind: positive = must pick the expected agent; negative = must answer itself; confusable = a neighbouring agent looks applicable but is not. Prototype cases, written to be reviewed.",
+  "cases": [
+    {
+      "id": "del-001", "kind": "positive",
+      "prompt": "Turn Jira ticket PAY-88 (\"customers should be able to save a card\") into testable requirements with acceptance criteria.",
+      "expect": ["business-analyst"],
+      "forbid": ["software-architect", "software-developer"]
+    },
+    {
+      "id": "del-002", "kind": "positive",
+      "prompt": "Tengo una idea de producto muy vaga, una app para gestionar reservas. Conviértela en requisitos claros con criterios de aceptación.",
+      "expect": ["business-analyst"],
+      "forbid": ["software-architect", "software-developer"]
+    },
+    {
+      "id": "del-003", "kind": "positive",
+      "prompt": "From this requirements document, design the architecture, technology choices and data model for the new notifications module.",
+      "expect": ["software-architect"],
+      "forbid": ["business-analyst", "software-developer"]
+    },
+    {
+      "id": "del-004", "kind": "positive",
+      "prompt": "Should we go with microservices or a modular monolith for this system? Write the implementation guide that follows from the answer.",
+      "expect": ["software-architect"],
+      "forbid": ["software-developer"]
+    },
+    {
+      "id": "del-005", "kind": "positive",
+      "prompt": "Implement the discount feature following the attached design document, and write a summary of what you built.",
+      "expect": ["software-developer"],
+      "forbid": ["software-architect", "business-analyst"]
+    },
+    {
+      "id": "del-006", "kind": "positive",
+      "prompt": "Add a new endpoint to the existing .NET API that returns the customer's order history, and wire it into the service layer.",
+      "expect": ["software-developer"],
+      "forbid": ["qa-engineer", "technical-writer"]
+    },
+    {
+      "id": "del-007", "kind": "positive",
+      "prompt": "We are at 62% test coverage and the configured minimum is 80%. Write the unit tests needed to reach it.",
+      "expect": ["qa-engineer"],
+      "forbid": ["software-developer"]
+    },
+    {
+      "id": "del-008", "kind": "positive",
+      "prompt": "Write the technical and the functional documentation for the new refund feature, with diagrams.",
+      "expect": ["technical-writer"],
+      "forbid": ["software-developer", "business-analyst"]
+    },
+    {
+      "id": "del-009", "kind": "positive",
+      "prompt": "Escribe la documentación del módulo de pedidos para el equipo de ingeniería y para los responsables de negocio.",
+      "expect": ["technical-writer"],
+      "forbid": ["software-developer", "business-analyst"]
+    },
+    {
+      "id": "del-010", "kind": "positive",
+      "prompt": "Prepare a Docker Compose stack and a CI/CD pipeline for deploying this app, and document the deployment steps.",
+      "expect": ["devops-engineer"],
+      "allow": ["technical-writer"],
+      "forbid": ["software-developer"]
+    },
+    {
+      "id": "del-011", "kind": "positive",
+      "prompt": "Revisa nuestro pipeline de despliegue y escribe el runbook de despliegue para producción.",
+      "expect": ["devops-engineer"],
+      "forbid": ["technical-writer"]
+    },
+    {
+      "id": "del-012", "kind": "positive",
+      "prompt": "I want to think out loud about why my caching approach keeps failing. Challenge my assumptions with questions; do not give me the answer or any code.",
+      "expect": ["rubber-duck"],
+      "forbid": ["software-developer", "software-architect"]
+    },
+    {
+      "id": "del-013", "kind": "negative",
+      "prompt": "What does the git rebase command do?",
+      "expect": [],
+      "forbid": ["business-analyst", "software-architect", "software-developer", "qa-engineer", "technical-writer", "devops-engineer", "rubber-duck"]
+    },
+    {
+      "id": "del-014", "kind": "negative",
+      "prompt": "Summarise this paragraph in one sentence: \"The service retries failed calls three times with exponential backoff and then gives up.\"",
+      "expect": [],
+      "forbid": ["business-analyst", "software-architect", "software-developer", "qa-engineer", "technical-writer", "devops-engineer", "rubber-duck"]
+    },
+    {
+      "id": "del-015", "kind": "confusable",
+      "prompt": "The C# service crashes at startup with a NullReferenceException in the configuration loader. Fix the bug.",
+      "expect": ["software-developer"],
+      "forbid": ["devops-engineer", "qa-engineer"]
+    },
+    {
+      "id": "del-016", "kind": "confusable",
+      "prompt": "Write the section of the README that explains how to install and run the project locally.",
+      "expect": [],
+      "allow": ["technical-writer"],
+      "forbid": ["devops-engineer", "software-developer"]
+    }
+  ]
+}
