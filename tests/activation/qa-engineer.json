@@ -1,0 +1,102 @@
+{
+  "agent": "qa-engineer",
+  "allow_by_tag": {"testing": ["unit-testing-strategy.md", "coverage-analysis.md"]},
+  "note": "Prototype cases, written to be reviewed. kind: positive = must load the expected skills; negative = must not load the forbidden ones; confusable = a neighbouring skill looks applicable but is not. Skills not listed in expect, forbid or allow are reported as extras. unit-testing-strategy and coverage-analysis are allowed on test-writing cases (tag testing): step 3 of the agent names both as examples.",
+  "cases": [
+    {
+      "id": "qa-001", "kind": "positive", "tags": ["testing"],
+      "prompt": "Write unit tests for the OrderService.Calculate method.",
+      "expect": ["dotnet-testing.md", "unit-testing-strategy.md"],
+      "forbid": ["accessibility-auditor.md", "frontend-performance-audit.md", "blazor-testing-bunit.md"]
+    },
+    {
+      "id": "qa-002", "kind": "positive", "tags": ["testing"],
+      "prompt": "Write tests for the InvoiceList Blazor component (a .razor file).",
+      "expect": ["blazor-testing-bunit.md", "unit-testing-strategy.md"],
+      "forbid": ["accessibility-auditor.md", "frontend-performance-audit.md"],
+      "allow": ["dotnet-testing.md"]
+    },
+    {
+      "id": "qa-003", "kind": "confusable", "tags": ["testing"],
+      "prompt": "Write integration tests for the ASP.NET Core orders API controller.",
+      "expect": ["dotnet-testing.md"],
+      "forbid": ["blazor-testing-bunit.md"]
+    },
+    {
+      "id": "qa-004", "kind": "positive", "tags": ["testing"],
+      "prompt": "Our configured testing coverage threshold is 80% and we are at 62%. Find the gaps and close them.",
+      "expect": ["coverage-analysis.md"],
+      "forbid": ["accessibility-auditor.md", "frontend-performance-audit.md"],
+      "allow": ["dotnet-testing.md", "blazor-testing-bunit.md"]
+    },
+    {
+      "id": "qa-005", "kind": "positive",
+      "prompt": "Run an accessibility audit of the signup page.",
+      "expect": ["accessibility-auditor.md"],
+      "forbid": ["dotnet-testing.md", "unit-testing-strategy.md"]
+    },
+    {
+      "id": "qa-006", "kind": "positive",
+      "prompt": "Review the frontend performance of the product listing page.",
+      "expect": ["frontend-performance-audit.md"],
+      "forbid": ["dotnet-testing.md", "unit-testing-strategy.md"]
+    },
+    {
+      "id": "qa-007", "kind": "positive",
+      "prompt": "Critique this UI like a hostile design reviewer: it works, but it feels generic.",
+      "expect": ["anti-generic-ai-visual-critique.md"],
+      "forbid": ["dotnet-testing.md", "unit-testing-strategy.md"]
+    },
+    {
+      "id": "qa-008", "kind": "positive",
+      "prompt": "Do a final pre-release audit of our marketing landing page before launch.",
+      "expect": ["anti-slop-preflight-audit.md"],
+      "allow": ["production-readiness-checklist.md", "anti-generic-ai-visual-critique.md", "accessibility-auditor.md", "frontend-performance-audit.md"],
+      "forbid": ["dotnet-testing.md", "unit-testing-strategy.md"]
+    },
+    {
+      "id": "qa-009", "kind": "positive",
+      "prompt": "Run a production-readiness review of the checkout flow UI. It is release blocking.",
+      "expect": ["production-readiness-checklist.md"],
+      "forbid": ["dotnet-testing.md", "unit-testing-strategy.md"],
+      "allow": ["accessibility-auditor.md", "frontend-performance-audit.md"]
+    },
+    {
+      "id": "qa-010", "kind": "positive",
+      "prompt": "Audit the data and API layer of our Blazor app: queries, caching and error handling.",
+      "expect": ["blazor-data-api-review.md"],
+      "forbid": ["accessibility-auditor.md", "unit-testing-strategy.md"]
+    },
+    {
+      "id": "qa-011", "kind": "confusable", "tags": ["testing"],
+      "prompt": "Write unit tests for the helper class that builds ARIA labels.",
+      "expect": ["dotnet-testing.md"],
+      "forbid": ["accessibility-auditor.md"]
+    },
+    {
+      "id": "qa-012", "kind": "confusable", "tags": ["testing"],
+      "prompt": "Write unit tests for the PerformanceCounterService class.",
+      "expect": ["dotnet-testing.md"],
+      "forbid": ["frontend-performance-audit.md"]
+    },
+    {
+      "id": "qa-013", "kind": "positive",
+      "prompt": "Haz una auditoría de accesibilidad de la página de pedidos.",
+      "expect": ["accessibility-auditor.md"],
+      "forbid": ["dotnet-testing.md", "unit-testing-strategy.md"]
+    },
+    {
+      "id": "qa-014", "kind": "positive", "tags": ["testing"],
+      "prompt": "Escribe tests unitarios para el servicio de facturación en C#.",
+      "expect": ["dotnet-testing.md", "unit-testing-strategy.md"],
+      "forbid": ["accessibility-auditor.md", "frontend-performance-audit.md"]
+    },
+    {
+      "id": "qa-015", "kind": "negative",
+      "prompt": "Explain what mutation testing is.",
+      "expect": [],
+      "forbid": ["accessibility-auditor.md", "frontend-performance-audit.md", "production-readiness-checklist.md", "anti-slop-preflight-audit.md", "blazor-data-api-review.md"],
+      "allow": ["coverage-analysis.md", "unit-testing-strategy.md"]
+    }
+  ]
+}
